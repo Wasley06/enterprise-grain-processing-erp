@@ -135,6 +135,8 @@ const copy: Record<Language, Record<string, string>> = {
     viewFullReport: "View Full Report",
     fromYesterday: "from yesterday",
     thisMonth: "This Month",
+    lastMonth: "Last Month",
+    last90Days: "Last 90 Days",
     orderId: "Order ID",
     amount: "Amount",
     status: "Status",
@@ -236,6 +238,8 @@ const copy: Record<Language, Record<string, string>> = {
     viewFullReport: "Ona Ripoti Kamili",
     fromYesterday: "kutoka jana",
     thisMonth: "Mwezi Huu",
+    lastMonth: "Mwezi Uliopita",
+    last90Days: "Siku 90 Zilizopita",
     orderId: "Namba ya Oda",
     amount: "Kiasi",
     status: "Hali",
@@ -1497,6 +1501,7 @@ function Dashboard({
   t: (key: string) => string;
 }) {
   const [selectedDate, setSelectedDate] = useState(() => new Date(2026, 5, 8));
+  const [chartPeriod, setChartPeriod] = useState<ChartPeriod>("month");
   const now = new Date();
   const today = now.toISOString().slice(0, 10);
   const startOfMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
@@ -1535,18 +1540,18 @@ function Dashboard({
     <div className="dashboard-grid space-y-7">
       <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         {[
-          { label: t("todaysSales"), value: formatTZS(metrics?.todaysSales || 6280000), icon: Wallet, tone: "orange", trend: "+18.6%", trendLabel: t("fromYesterday") },
-          { label: t("todaysProduction"), value: formatQty(metrics?.todaysProduction || 628, "kg"), icon: Boxes, tone: "green", trend: "+12.5%", trendLabel: t("fromYesterday") },
-          { label: t("inventoryValue"), value: formatTZS(metrics?.inventoryValue || 0), icon: Package, tone: "purple", trend: "-4.3%", trendLabel: t("fromYesterday") },
-          { label: t("pendingOrders"), value: metrics?.pendingOrders || 0, icon: ClipboardList, tone: "blue", trend: "+8", trendLabel: t("fromYesterday") }
+          { label: t("todaysSales"), value: formatTZS(metrics?.todaysSales || 6280000), icon: Wallet, tone: "orange", trend: "+18.6%", trendLabel: t("fromYesterday"), tab: "sales" },
+          { label: t("todaysProduction"), value: formatQty(metrics?.todaysProduction || 628, "kg"), icon: Boxes, tone: "green", trend: "+12.5%", trendLabel: t("fromYesterday"), tab: "production" },
+          { label: t("inventoryValue"), value: formatTZS(metrics?.inventoryValue || 0), icon: Package, tone: "purple", trend: "-4.3%", trendLabel: t("fromYesterday"), tab: "inventory" },
+          { label: t("pendingOrders"), value: metrics?.pendingOrders || 0, icon: ClipboardList, tone: "blue", trend: "+8", trendLabel: t("fromYesterday"), tab: "orders" }
         ].map((card) => (
-          <DashboardHeroCard key={card.label} {...card} />
+          <DashboardHeroCard key={card.label} {...card} onClick={() => setActiveTab(card.tab as NavItemId)} />
         ))}
       </div>
 
       <div className="grid gap-7 xl:grid-cols-2">
-        <DashboardChartCard title={t("salesOverview")} leftLabel={t("activeSales")} rightLabel={t("previousSales")} variant="sales" formatTZS={formatTZS} />
-        <DashboardChartCard title={t("profitLossMargin")} leftLabel={t("profitMarginPct")} rightLabel={t("lossMarginPct")} variant="margin" formatTZS={formatTZS} />
+        <DashboardChartCard title={t("salesOverview")} leftLabel={t("activeSales")} rightLabel={t("previousSales")} variant="sales" formatTZS={formatTZS} t={t} period={chartPeriod} setPeriod={setChartPeriod} />
+        <DashboardChartCard title={t("profitLossMargin")} leftLabel={t("profitMarginPct")} rightLabel={t("lossMarginPct")} variant="margin" formatTZS={formatTZS} t={t} period={chartPeriod} setPeriod={setChartPeriod} />
       </div>
 
       <div className="grid gap-7 xl:grid-cols-[minmax(300px,0.32fr)_minmax(0,0.68fr)]">
@@ -1568,6 +1573,7 @@ function Dashboard({
           selectedDeliveries={selectedDeliveries}
           formatTZS={formatTZS}
           formatQty={formatQty}
+          setActiveTab={setActiveTab}
         />
       </div>
 
@@ -1636,9 +1642,23 @@ function getLocalDateKey(date: Date) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-function DashboardHeroCard({ label, value, icon: Icon, tone, trend, trendLabel }: { label: string; value: string | number; icon: typeof Package; tone: string; trend: string; trendLabel: string; key?: React.Key }) {
+type ChartPeriod = "month" | "lastMonth" | "quarter";
+
+function DashboardHeroCard({ label, value, icon: Icon, tone, trend, trendLabel, onClick }: { label: string; value: string | number; icon: typeof Package; tone: string; trend: string; trendLabel: string; onClick?: () => void; key?: React.Key }) {
   return (
-    <Card className="dashboard-hero-card">
+    <section
+      role="button"
+      tabIndex={0}
+      onClick={onClick}
+      onKeyDown={(event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          onClick?.();
+        }
+      }}
+      className="dashboard-hero-card rounded-2xl border border-slate-200 bg-white p-4 text-left shadow-sm"
+      aria-label={`${label}: ${value}`}
+    >
       <div className="flex items-start justify-between gap-4">
         <div className={`dashboard-hero-icon tone-${tone}`}>
           <Icon className="h-7 w-7" />
@@ -1648,7 +1668,7 @@ function DashboardHeroCard({ label, value, icon: Icon, tone, trend, trendLabel }
       <p className="mt-4 text-sm font-bold text-slate-600">{label}</p>
       <p className="mt-2 text-2xl font-black text-slate-950">{value}</p>
       <p className={`mt-3 text-xs font-bold ${trend.startsWith("-") ? "text-red-500" : "text-emerald-600"}`}>{trend} {trendLabel}</p>
-    </Card>
+    </section>
   );
 }
 
@@ -1661,13 +1681,48 @@ function Sparkline({ tone }: { tone: string }) {
   );
 }
 
-function DashboardChartCard({ title, leftLabel, rightLabel, variant, formatTZS }: { title: string; leftLabel: string; rightLabel: string; variant: "sales" | "margin"; formatTZS: (value: number) => string }) {
-  const data = variant === "sales"
-    ? [24, 30, 26, 35, 43, 37, 44, 50, 39, 47, 48, 40, 34, 36]
-    : [0, 8, 6, 14, 5, 11, 3, 16, 9, 15, 12, 5, 7, 4];
+function DashboardChartCard({
+  title,
+  leftLabel,
+  rightLabel,
+  variant,
+  formatTZS,
+  t,
+  period,
+  setPeriod
+}: {
+  title: string;
+  leftLabel: string;
+  rightLabel: string;
+  variant: "sales" | "margin";
+  formatTZS: (value: number) => string;
+  t: (key: string) => string;
+  period: ChartPeriod;
+  setPeriod: (period: ChartPeriod) => void;
+}) {
+  const chartData: Record<ChartPeriod, { sales: number[]; margin: number[] }> = {
+    month: {
+      sales: [24, 30, 26, 35, 43, 37, 44, 50, 39, 47, 48, 40, 34, 36],
+      margin: [0, 8, 6, 14, 5, 11, 3, 16, 9, 15, 12, 5, 7, 4]
+    },
+    lastMonth: {
+      sales: [19, 22, 24, 21, 29, 34, 31, 37, 35, 39, 36, 33, 38, 41],
+      margin: [2, 5, 4, 9, 7, 10, 6, 12, 11, 8, 10, 13, 9, 11]
+    },
+    quarter: {
+      sales: [31, 35, 42, 39, 46, 52, 48, 56, 62, 59, 64, 68, 61, 72],
+      margin: [4, 7, 9, 6, 12, 15, 10, 17, 13, 18, 16, 20, 14, 19]
+    }
+  };
+  const data = chartData[period][variant];
   const max = Math.max(...data);
   const activeTotal = data.reduce((sum, value) => sum + value, 0) * 100000;
   const previousTotal = Math.round(activeTotal * (variant === "sales" ? 0.58 : 0.34));
+  const periodOptions: { value: ChartPeriod; label: string }[] = [
+    { value: "month", label: t("thisMonth") },
+    { value: "lastMonth", label: t("lastMonth") },
+    { value: "quarter", label: t("last90Days") }
+  ];
   const graphPoints = data.map((value, index) => ({ x: 40 + index * 48, y: 190 - (value / max) * 140, value }));
   const smoothPath = (pts: typeof graphPoints) => pts.map((point, index) => {
     if (index === 0) return `M ${point.x} ${point.y}`;
@@ -1682,7 +1737,13 @@ function DashboardChartCard({ title, leftLabel, rightLabel, variant, formatTZS }
     <Card className="dashboard-chart-card">
       <div className="mb-4 flex items-center justify-between">
         <h3 className="text-lg font-black text-slate-950">{title}</h3>
-        <button className="btn-secondary text-xs">{title.includes("Faida") || title.includes("Mauzo") ? "Mwezi Huu" : "This Month"} <ChevronDown className="h-4 w-4" /></button>
+        <label className="chart-period-control">
+          <span className="sr-only">{t("thisMonth")}</span>
+          <select value={period} onChange={(event) => setPeriod(event.target.value as ChartPeriod)}>
+            {periodOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+          </select>
+          <ChevronDown className="h-4 w-4" />
+        </label>
       </div>
       <div className="mb-4 flex gap-5 text-xs font-bold text-slate-500">
         <span className="flex items-center gap-2"><i className={`legend-line ${variant === "sales" ? "orange" : "green"}`} />{leftLabel}</span>
@@ -1780,7 +1841,8 @@ function CalendarDetailsPanel({
   selectedOrders,
   selectedDeliveries,
   formatTZS,
-  formatQty
+  formatQty,
+  setActiveTab
 }: {
   t: (key: string) => string;
   selectedDate: Date;
@@ -1792,17 +1854,18 @@ function CalendarDetailsPanel({
   selectedDeliveries: number;
   formatTZS: (value: number) => string;
   formatQty: (quantity: number, unit: string) => string;
+  setActiveTab: (tab: NavItemId) => void;
 }) {
   return (
     <Card className="calendar-details-panel">
       <h4>{t("detailsFor")} {selectedDate.toLocaleDateString(t("dashboard") === "Dashibodi" ? "sw-TZ" : "en-US", { day: "2-digit", month: "long", year: "numeric" })}</h4>
       <div className="mt-4 flex flex-col">
-        <CalendarDetail icon={Wallet} label={t("sales")} value={formatTZS(selectedRevenue)} tone="orange" />
-        <CalendarDetail icon={Boxes} label={t("production")} value={formatQty(selectedProduction, "kg")} tone="green" />
-        <CalendarDetail icon={TrendingUp} label={t("profit")} value={formatTZS(selectedProfit)} tone="green" />
-        <CalendarDetail icon={AlertTriangle} label={t("loss")} value={formatTZS(selectedLoss)} tone="red" />
-        <CalendarDetail icon={ClipboardList} label={t("orders")} value={selectedOrders} tone="blue" />
-        <CalendarDetail icon={Truck} label={t("deliveries")} value={selectedDeliveries} tone="slate" />
+        <CalendarDetail icon={Wallet} label={t("sales")} value={formatTZS(selectedRevenue)} tone="orange" onClick={() => setActiveTab("sales")} />
+        <CalendarDetail icon={Boxes} label={t("production")} value={formatQty(selectedProduction, "kg")} tone="green" onClick={() => setActiveTab("production")} />
+        <CalendarDetail icon={TrendingUp} label={t("profit")} value={formatTZS(selectedProfit)} tone="green" onClick={() => setActiveTab("finance")} />
+        <CalendarDetail icon={AlertTriangle} label={t("loss")} value={formatTZS(selectedLoss)} tone="red" onClick={() => setActiveTab("finance")} />
+        <CalendarDetail icon={ClipboardList} label={t("orders")} value={selectedOrders} tone="blue" onClick={() => setActiveTab("orders")} />
+        <CalendarDetail icon={Truck} label={t("deliveries")} value={selectedDeliveries} tone="slate" onClick={() => setActiveTab("sales")} />
       </div>
     </Card>
   );
@@ -1902,13 +1965,13 @@ function AlertsView({
   );
 }
 
-function CalendarDetail({ icon: Icon, label, value, tone }: { icon: typeof Package; label: string; value: React.ReactNode; tone: string }) {
+function CalendarDetail({ icon: Icon, label, value, tone, onClick }: { icon: typeof Package; label: string; value: React.ReactNode; tone: string; onClick?: () => void }) {
   return (
-    <div className="calendar-detail">
+    <button type="button" className="calendar-detail" onClick={onClick} aria-label={`${label}: ${value}`}>
       <span className={`detail-icon tone-${tone}`}><Icon className="h-4 w-4" /></span>
       <span className="flex-1 font-semibold text-slate-700">{label}</span>
       <strong>{value}</strong>
-    </div>
+    </button>
   );
 }
 

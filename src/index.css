@@ -398,6 +398,21 @@ button {
   min-height: 9.75rem;
   border-radius: 1.5rem;
   padding: 1.35rem !important;
+  height: 100%;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease, background 160ms ease;
+}
+
+.dashboard-hero-card:hover,
+.dashboard-hero-card:focus-visible {
+  border-color: #d6a83a;
+  background: linear-gradient(180deg, #ffffff 0%, #fffdf4 100%);
+  box-shadow: 0 20px 48px rgba(214, 168, 58, 0.22);
+  transform: translateY(-2px);
+}
+
+.dashboard-hero-card:focus-visible {
+  outline: 3px solid rgba(214, 168, 58, 0.42);
+  outline-offset: 3px;
 }
 
 .dashboard-hero-icon,
@@ -447,6 +462,44 @@ button {
   border-radius: 1.5rem;
   padding: 1.45rem;
   min-height: 24rem;
+}
+
+.chart-period-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-width: 9.5rem;
+  border: 1px solid #dbe4ef;
+  border-radius: 0.85rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 0.75rem;
+  font-weight: 900;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.05);
+}
+
+.chart-period-control select {
+  width: 100%;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0.65rem 2rem 0.65rem 0.85rem;
+  color: inherit;
+  font: inherit;
+  outline: none;
+}
+
+.chart-period-control svg {
+  position: absolute;
+  right: 0.65rem;
+  pointer-events: none;
+  color: #0b5cab;
+}
+
+.chart-period-control:focus-within,
+.chart-period-control:hover {
+  border-color: #d6a83a;
+  box-shadow: 0 0 0 3px rgba(214, 168, 58, 0.16);
 }
 
 .legend-line {
@@ -623,11 +676,26 @@ button {
 
 .calendar-detail {
   display: flex;
+  width: 100%;
   align-items: center;
   gap: 0.55rem;
   border-bottom: 1px solid #f1f5f9;
   padding: 0.82rem 0;
   font-size: 0.74rem;
+  text-align: left;
+  transition: background 140ms ease, border-color 140ms ease, transform 140ms ease;
+}
+
+.calendar-detail:hover,
+.calendar-detail:focus-visible {
+  border-color: #d6a83a;
+  background: #fffdf4;
+  transform: translateX(2px);
+}
+
+.calendar-detail:focus-visible {
+  outline: 2px solid rgba(214, 168, 58, 0.38);
+  outline-offset: 2px;
 }
 
 .calendar-inline-details .calendar-detail {
@@ -918,6 +986,25 @@ button {
 [data-theme="dark"] .dashboard-summary {
   background: #111827 !important;
   border-color: #334155 !important;
+}
+
+[data-theme="dark"] .dashboard-hero-card:hover,
+[data-theme="dark"] .dashboard-hero-card:focus-visible,
+[data-theme="dark"] .calendar-detail:hover,
+[data-theme="dark"] .calendar-detail:focus-visible {
+  background: #172033 !important;
+  border-color: #d6a83a !important;
+}
+
+[data-theme="dark"] .chart-period-control {
+  background: #111827 !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .chart-period-control:hover,
+[data-theme="dark"] .chart-period-control:focus-within {
+  border-color: #d6a83a !important;
 }
 
 [data-theme="dark"] .mini-table td,
