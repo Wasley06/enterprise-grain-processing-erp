@@ -8,6 +8,11 @@ Push-Location $root
 try {
   npm run build
 
+  $downloadableInstallers = Join-Path $root "dist\installers"
+  if (Test-Path $downloadableInstallers) {
+    Get-ChildItem -LiteralPath $downloadableInstallers -Filter "*.zip" -File | Remove-Item -Force
+  }
+
   if (Test-Path $release) {
     Remove-Item -LiteralPath $release -Recurse -Force
   }

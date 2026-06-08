@@ -1,6 +1,6 @@
 {
-  "version": "1.0.2",
-  "releasedAt": "2026-06-09T01:50:00+03:00",
+  "version": "1.0.3",
+  "releasedAt": "2026-06-09T02:30:00+03:00",
   "installerUrl": "https://enterprise-grain-processing-erp.vercel.app/installers/",
-  "notes": "Fixes the Windows installer launch error and refreshes installer packages."
+  "notes": "Adds a USB installer that can recover when run directly from WinRAR or ZIP preview."
 }

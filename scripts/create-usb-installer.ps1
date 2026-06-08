@@ -35,6 +35,25 @@ if errorlevel 1 (
 
 set "INSTALL_DIR=%LOCALAPPDATA%\Grain ERP"
 set "APP_DIR=%INSTALL_DIR%\GrainERP-Windows-Portable"
+set "PAYLOAD=%~dp0GrainERP-Windows-Portable.zip"
+set "DOWNLOAD_URL=https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Windows-Portable-v1.0.3.zip"
+
+if not exist "%PAYLOAD%" (
+  echo.
+  echo GrainERP-Windows-Portable.zip was not found beside this installer.
+  echo This usually happens when the BAT file is opened directly from WinRAR or a ZIP preview.
+  echo Downloading the payload now...
+  echo.
+  powershell -NoProfile -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri '%DOWNLOAD_URL%' -OutFile '%TEMP%\GrainERP-Windows-Portable.zip'"
+  if errorlevel 1 (
+    echo.
+    echo Download failed. Please extract the full USB installer ZIP first, then run INSTALL-GRAIN-ERP.bat again.
+    echo.
+    pause
+    exit /b 1
+  )
+  set "PAYLOAD=%TEMP%\GrainERP-Windows-Portable.zip"
+)
 
 echo.
 echo Installing Grain ERP to:
@@ -42,7 +61,7 @@ echo %INSTALL_DIR%
 echo.
 
 if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Expand-Archive -LiteralPath '%~dp0GrainERP-Windows-Portable.zip' -DestinationPath '%INSTALL_DIR%' -Force"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Expand-Archive -LiteralPath '%PAYLOAD%' -DestinationPath '%INSTALL_DIR%' -Force"
 
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws=New-Object -ComObject WScript.Shell; $desktop=[Environment]::GetFolderPath('Desktop'); $s=$ws.CreateShortcut($desktop + '\Grain ERP.lnk'); $s.TargetPath='%APP_DIR%\Start-Grain-ERP.bat'; $s.WorkingDirectory='%APP_DIR%'; $s.Save()"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws=New-Object -ComObject WScript.Shell; $start=[Environment]::GetFolderPath('StartMenu') + '\Programs\Grain ERP.lnk'; $s=$ws.CreateShortcut($start); $s.TargetPath='%APP_DIR%\Start-Grain-ERP.bat'; $s.WorkingDirectory='%APP_DIR%'; $s.Save()"
@@ -81,6 +100,10 @@ Steps:
 2. Open the folder on the target computer.
 3. Double-click INSTALL-GRAIN-ERP.bat.
 4. After installation, open Grain ERP from the Desktop shortcut or Start Menu.
+
+Important:
+- Extract the full ZIP first before running INSTALL-GRAIN-ERP.bat.
+- If you run the BAT directly from WinRAR or ZIP preview, it will try to download the missing payload automatically.
 
 Requirement:
 - Node.js LTS must be installed on the target computer.
