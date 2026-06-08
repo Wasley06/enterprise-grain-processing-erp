@@ -1,0 +1,1132 @@
+{
+  "suppliers": [
+    {
+      "id": "SPL-001",
+      "name": "Ushirika Agri-Cooperatives",
+      "company": "Ushirika Farm Unions",
+      "contactPerson": "Joshua Banda",
+      "phone": "+254 722 001 002",
+      "email": "banda@ushirika-coop.org",
+      "address": "Rift Valley Silos Road, Eldoret, Kenya",
+      "tin": "P00192842J",
+      "bankDetails": {
+        "bankName": "KCB Bank",
+        "accountNumber": "1102948293",
+        "branchCode": "KC012"
+      },
+      "mobileMoneyDetails": "Corporate Paybill 400200",
+      "reliabilityScore": 96,
+      "deliverySpeedDays": 2,
+      "catalog": [
+        {
+          "product": "Maize",
+          "unit": "KG",
+          "price": 700,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-03-01",
+              "price": 750
+            },
+            {
+              "date": "2026-04-15",
+              "price": 725
+            },
+            {
+              "date": "2026-05-20",
+              "price": 700
+            }
+          ]
+        },
+        {
+          "product": "Wheat",
+          "unit": "KG",
+          "price": 800,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-03-01",
+              "price": 850
+            },
+            {
+              "date": "2026-05-15",
+              "price": 800
+            }
+          ]
+        },
+        {
+          "product": "Sorghum",
+          "unit": "KG",
+          "price": 550,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-04-10",
+              "price": 550
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SPL-002",
+      "name": "Kilimo Bora Wholesale",
+      "company": "Kilimo Bora Grain Growers",
+      "contactPerson": "Mercy Kiprop",
+      "phone": "+254 733 998 812",
+      "email": "mercy@kilimobora.com",
+      "address": "Warehouse District Road, Nakuru, Kenya",
+      "tin": "P00582914K",
+      "bankDetails": {
+        "bankName": "Equity Bank",
+        "accountNumber": "1203957291",
+        "branchCode": "EQ04"
+      },
+      "mobileMoneyDetails": "M-Pesa Tilly 884920",
+      "reliabilityScore": 89,
+      "deliverySpeedDays": 4,
+      "catalog": [
+        {
+          "product": "Maize",
+          "unit": "KG",
+          "price": 725,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-03-01",
+              "price": 725
+            },
+            {
+              "date": "2026-05-01",
+              "price": 725
+            }
+          ]
+        },
+        {
+          "product": "Wheat",
+          "unit": "KG",
+          "price": 775,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-04-01",
+              "price": 775
+            }
+          ]
+        },
+        {
+          "product": "Beans",
+          "unit": "KG",
+          "price": 1125,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-02-15",
+              "price": 1200
+            },
+            {
+              "date": "2026-05-10",
+              "price": 1125
+            }
+          ]
+        },
+        {
+          "product": "Sunflower",
+          "unit": "KG",
+          "price": 1625,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-04-12",
+              "price": 1625
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "SPL-003",
+      "name": "Mombasa Grain Importers Ltd",
+      "company": "Mombasa Trading Bulk",
+      "contactPerson": "Saeed Al-Amin",
+      "phone": "+254 711 556 677",
+      "email": "s.alamin@mombasagrain.com",
+      "address": "Port Plaza Block B, Shimanzi, Mombasa, Kenya",
+      "tin": "P00994827H",
+      "bankDetails": {
+        "bankName": "Absa Bank",
+        "accountNumber": "0309485721",
+        "branchCode": "AB08"
+      },
+      "mobileMoneyDetails": "Corporate Paybill 99318",
+      "reliabilityScore": 92,
+      "deliverySpeedDays": 3,
+      "catalog": [
+        {
+          "product": "Rice",
+          "unit": "KG",
+          "price": 1450,
+          "availability": true,
+          "history": [
+            {
+              "date": "2026-05-01",
+              "price": 1450
+            }
+          ]
+        },
+        {
+          "product": "Maize",
+          "unit": "KG",
+          "price": 675,
+          "availability": false,
+          "history": [
+            {
+              "date": "2026-02-10",
+              "price": 675
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "customers": [
+    {
+      "id": "CST-001",
+      "name": "Apex Bakeries Ltd",
+      "company": "Apex Confectionery & Baking Group",
+      "phone": "+254 722 555 444",
+      "email": "procurement@apexbakeries.co.ke",
+      "tin": "P00495819X",
+      "address": "Industrial Area, Enterprise Road, Nairobi",
+      "creditScore": 88,
+      "riskLevel": "Low",
+      "creditLimit": 37500000,
+      "purchaseCount": 27,
+      "onTimePaymentsPercent": 94,
+      "utilizationRatePercent": 0,
+      "outstandingDebts": 0,
+      "workflowApprovalStatus": "Approved"
+    },
+    {
+      "id": "CST-002",
+      "name": "United Animal Feed & Millers",
+      "company": "United Feed Mills Corp",
+      "phone": "+254 733 444 555",
+      "email": "mill@unitedfeed.co.ke",
+      "tin": "P00881944M",
+      "address": "Factory Highway Area, Nakuru, Kenya",
+      "creditScore": 71,
+      "riskLevel": "Medium",
+      "creditLimit": 20000000,
+      "purchaseCount": 18,
+      "onTimePaymentsPercent": 82,
+      "utilizationRatePercent": 0,
+      "outstandingDebts": 0,
+      "workflowApprovalStatus": "Approved"
+    },
+    {
+      "id": "CST-003",
+      "name": "Mambo Supermarkets Chain",
+      "company": "Mambo Retail Outlets Ltd",
+      "phone": "+254 711 222 333",
+      "email": "supplies@mambooutlets.com",
+      "tin": "P00223847Q",
+      "address": "Mambo Tower, Kenyatta Avenue, Nairobi",
+      "creditScore": 95,
+      "riskLevel": "Low",
+      "creditLimit": 50000000,
+      "purchaseCount": 42,
+      "onTimePaymentsPercent": 98,
+      "utilizationRatePercent": 0,
+      "outstandingDebts": 0,
+      "workflowApprovalStatus": "Approved"
+    },
+    {
+      "id": "CST-004",
+      "name": "East Agricultural Distributors",
+      "company": "East Agri Traders Ltd",
+      "phone": "+254 728 887 766",
+      "email": "eastagri@distributors.com",
+      "tin": "P00384719Y",
+      "address": "Border Outpost Highway, Busia, Kenya",
+      "creditScore": 48,
+      "riskLevel": "High",
+      "creditLimit": 25000000,
+      "purchaseCount": 12,
+      "onTimePaymentsPercent": 64,
+      "utilizationRatePercent": 0,
+      "outstandingDebts": 0,
+      "workflowApprovalStatus": "Pending"
+    }
+  ],
+  "inventory": [
+    {
+      "id": "INV-001",
+      "productName": "Maize",
+      "category": "Raw Material",
+      "quantity": 120000,
+      "unit": "KG",
+      "costPerUnit": 700,
+      "value": 84000000,
+      "state": "Stored",
+      "warehouseId": "Central Silo A"
+    },
+    {
+      "id": "INV-002",
+      "productName": "Wheat",
+      "category": "Raw Material",
+      "quantity": 85000,
+      "unit": "KG",
+      "costPerUnit": 800,
+      "value": 68000000,
+      "state": "Stored",
+      "warehouseId": "Central Silo A"
+    },
+    {
+      "id": "INV-003",
+      "productName": "Sorghum",
+      "category": "Raw Material",
+      "quantity": 30000,
+      "unit": "KG",
+      "costPerUnit": 550,
+      "value": 16500000,
+      "state": "Stored",
+      "warehouseId": "Northern Factory Store"
+    },
+    {
+      "id": "INV-004",
+      "productName": "Sunflower",
+      "category": "Raw Material",
+      "quantity": 40000,
+      "unit": "KG",
+      "costPerUnit": 1625,
+      "value": 65000000,
+      "state": "Stored",
+      "warehouseId": "Northern Factory Store"
+    },
+    {
+      "id": "INV-005",
+      "productName": "Beans",
+      "category": "Raw Material",
+      "quantity": 15000,
+      "unit": "KG",
+      "costPerUnit": 1125,
+      "value": 16875000,
+      "state": "Stored",
+      "warehouseId": "Central Silo A"
+    },
+    {
+      "id": "INV-006",
+      "productName": "Flour",
+      "category": "Processed Product",
+      "quantity": 14700,
+      "unit": "KG",
+      "costPerUnit": 1125,
+      "value": 16537500,
+      "state": "Finished Goods",
+      "warehouseId": "Northern Factory Store"
+    },
+    {
+      "id": "INV-007",
+      "productName": "Bran",
+      "category": "By-product",
+      "quantity": 4000,
+      "unit": "KG",
+      "costPerUnit": 300,
+      "value": 1200000,
+      "state": "Finished Goods",
+      "warehouseId": "Northern Factory Store"
+    },
+    {
+      "id": "INV-008",
+      "productName": "Animal Feed",
+      "category": "Processed Product",
+      "quantity": 10000,
+      "unit": "KG",
+      "costPerUnit": 450,
+      "value": 4500000,
+      "state": "Finished Goods",
+      "warehouseId": "Southern Animal Feed Depot"
+    }
+  ],
+  "movements": [
+    {
+      "id": "MOV-7641",
+      "productName": "Flour",
+      "quantity": 100,
+      "unit": "KG",
+      "costPerUnit": 1125,
+      "totalValue": 112500,
+      "fromState": "Finished Goods",
+      "toState": "Sold",
+      "dateTime": "2026-06-08T07:51:09.870Z",
+      "performedBy": "Mwanajuma Abdallah (Director)",
+      "notes": "Fulfillment of Sales Order INV/2026/01883"
+    },
+    {
+      "id": "MOV-6253",
+      "productName": "Flour",
+      "quantity": 100,
+      "unit": "KG",
+      "costPerUnit": 1125,
+      "totalValue": 112500,
+      "fromState": "Finished Goods",
+      "toState": "Sold",
+      "dateTime": "2026-06-08T07:51:04.117Z",
+      "performedBy": "Mwanajuma Abdallah (Director)",
+      "notes": "Fulfillment of Sales Order INV/2026/01651"
+    },
+    {
+      "id": "MOV-2745",
+      "productName": "Flour",
+      "quantity": 100,
+      "unit": "KG",
+      "costPerUnit": 1125,
+      "totalValue": 112500,
+      "fromState": "Finished Goods",
+      "toState": "Sold",
+      "dateTime": "2026-06-08T05:19:17.840Z",
+      "performedBy": "Mwanajuma Abdallah (Director)",
+      "notes": "Fulfillment of Sales Order INV/2026/01688"
+    },
+    {
+      "id": "MOV-001",
+      "productName": "Maize",
+      "quantity": 100000,
+      "unit": "KG",
+      "costPerUnit": 700,
+      "totalValue": 70000000,
+      "fromState": "Purchased",
+      "toState": "Stored",
+      "dateTime": "2026-06-01T08:00:00Z",
+      "performedBy": "Storekeeper Maina",
+      "notes": "Intake from Ushirika Agri-Cooperatives, Batch M-99. Moisture level 13.2% okay."
+    },
+    {
+      "id": "MOV-002",
+      "productName": "Maize",
+      "quantity": 10000,
+      "unit": "KG",
+      "costPerUnit": 700,
+      "totalValue": 7000000,
+      "fromState": "Stored",
+      "toState": "Sent To Production",
+      "dateTime": "2026-06-03T09:15:00Z",
+      "performedBy": "Manager Ochieng",
+      "notes": "Milling intake for Run RUN-21"
+    }
+  ],
+  "processingRuns": [
+    {
+      "id": "RUN-001",
+      "dateTime": "2026-06-03T11:45:00Z",
+      "operator": "David Kiprotich",
+      "machineId": "Mill Machine 3 (Main)",
+      "inputs": [
+        {
+          "productName": "Maize",
+          "quantity": 10000,
+          "costPerUnit": 700
+        }
+      ],
+      "outputs": [
+        {
+          "productName": "Flour",
+          "quantity": 7200,
+          "costPerUnit": 1100,
+          "category": "Processed Product"
+        },
+        {
+          "productName": "Bran",
+          "quantity": 1800,
+          "costPerUnit": 300,
+          "category": "By-product"
+        },
+        {
+          "productName": "Waste",
+          "quantity": 1000,
+          "costPerUnit": 0,
+          "category": "Waste"
+        }
+      ],
+      "expectedYieldPercent": 80,
+      "actualYieldPercent": 72,
+      "yieldDifferencePercent": -8,
+      "wastePercent": 10,
+      "productionEfficiencyPercent": 90,
+      "status": "Anomalous",
+      "anomalyFlags": [
+        "Yield below expectations (> 5% difference)",
+        "High waste level"
+      ],
+      "aiRecommendations": "Flour output is 8.00% below expected yield of 80.00%. Waste is elevated. Inspect Milling chamber gates on Machine 3 and review high moisture contents of Raw batch M-99. Performance records point to operator David Kiprotich on Shift B."
+    },
+    {
+      "id": "RUN-002",
+      "dateTime": "2026-06-05T14:30:00Z",
+      "operator": "David Kiprotich",
+      "machineId": "Mill Machine 3 (Main)",
+      "inputs": [
+        {
+          "productName": "Maize",
+          "quantity": 12000,
+          "costPerUnit": 700
+        }
+      ],
+      "outputs": [
+        {
+          "productName": "Flour",
+          "quantity": 9550,
+          "costPerUnit": 1050,
+          "category": "Processed Product"
+        },
+        {
+          "productName": "Bran",
+          "quantity": 2000,
+          "costPerUnit": 300,
+          "category": "By-product"
+        },
+        {
+          "productName": "Waste",
+          "quantity": 450,
+          "costPerUnit": 0,
+          "category": "Waste"
+        }
+      ],
+      "expectedYieldPercent": 80,
+      "actualYieldPercent": 79.58,
+      "yieldDifferencePercent": -0.42,
+      "wastePercent": 3.75,
+      "productionEfficiencyPercent": 99.4,
+      "status": "Completed",
+      "anomalyFlags": [],
+      "aiRecommendations": "Yield operations stabilized at 79.58% which closely matches expectation. Waste is minimal at 3.75%. Machine 3 calibration is performing optimally."
+    }
+  ],
+  "invoices": [
+    {
+      "id": "INV-8851",
+      "invoiceNumber": "INV/2026/0144",
+      "customerId": "CST-001",
+      "customerName": "Apex Bakeries Ltd",
+      "items": [
+        {
+          "productName": "Flour",
+          "quantity": 8000,
+          "unit": "KG",
+          "pricePerUnit": 1625,
+          "total": 13000000,
+          "costPerUnit": 1100
+        }
+      ],
+      "subtotal": 12800000,
+      "tax": 200000,
+      "totalAmount": 13000000,
+      "amountPaid": 13000000,
+      "status": "Paid",
+      "dateCreated": "2026-06-04",
+      "dueDate": "2026-07-04"
+    },
+    {
+      "id": "INV-8852",
+      "invoiceNumber": "INV/2026/0145",
+      "customerId": "CST-002",
+      "customerName": "United Animal Feed & Millers",
+      "items": [
+        {
+          "productName": "Bran",
+          "quantity": 15000,
+          "unit": "KG",
+          "pricePerUnit": 600,
+          "total": 9000000,
+          "costPerUnit": 300
+        }
+      ],
+      "subtotal": 9000000,
+      "tax": 0,
+      "totalAmount": 9000000,
+      "amountPaid": 9000000,
+      "status": "Paid",
+      "dateCreated": "2026-06-06",
+      "dueDate": "2026-06-25"
+    },
+    {
+      "id": "INV-8853",
+      "invoiceNumber": "INV/2026/0146",
+      "customerId": "CST-003",
+      "customerName": "Mambo Supermarkets Chain",
+      "items": [
+        {
+          "productName": "Flour",
+          "quantity": 12000,
+          "unit": "KG",
+          "pricePerUnit": 1550,
+          "total": 18600000,
+          "costPerUnit": 1050
+        }
+      ],
+      "subtotal": 18600000,
+      "tax": 0,
+      "totalAmount": 18600000,
+      "amountPaid": 18600000,
+      "status": "Paid",
+      "dateCreated": "2026-06-05",
+      "dueDate": "2026-06-20",
+      "paymentMethod": "Bank"
+    },
+    {
+      "id": "INV-8854",
+      "invoiceNumber": "INV/2026/0147",
+      "customerId": "CST-004",
+      "customerName": "East Agricultural Distributors",
+      "items": [
+        {
+          "productName": "Animal Feed",
+          "quantity": 40000,
+          "unit": "KG",
+          "pricePerUnit": 575,
+          "total": 23000000,
+          "costPerUnit": 450
+        }
+      ],
+      "subtotal": 23000000,
+      "tax": 0,
+      "totalAmount": 23000000,
+      "amountPaid": 23000000,
+      "status": "Paid",
+      "dateCreated": "2026-05-10",
+      "dueDate": "2026-06-01"
+    },
+    {
+      "id": "INV-3253",
+      "invoiceNumber": "INV/2026/01688",
+      "customerId": "CST-001",
+      "customerName": "Apex Bakeries Ltd",
+      "items": [
+        {
+          "productName": "Flour",
+          "quantity": 100,
+          "unit": "KG",
+          "pricePerUnit": 1600,
+          "total": 160000,
+          "costPerUnit": 1125
+        }
+      ],
+      "subtotal": 160000,
+      "tax": 2400,
+      "totalAmount": 162400,
+      "amountPaid": 162400,
+      "status": "Paid",
+      "dateCreated": "2026-06-08",
+      "dueDate": "2026-06-22",
+      "paymentMethod": "Cash"
+    },
+    {
+      "id": "INV-6417",
+      "invoiceNumber": "INV/2026/01651",
+      "customerId": "CST-001",
+      "customerName": "Apex Bakeries Ltd",
+      "items": [
+        {
+          "productName": "Flour",
+          "quantity": 100,
+          "unit": "KG",
+          "pricePerUnit": 1600,
+          "total": 160000,
+          "costPerUnit": 1125
+        }
+      ],
+      "subtotal": 160000,
+      "tax": 2400,
+      "totalAmount": 162400,
+      "amountPaid": 162400,
+      "status": "Paid",
+      "dateCreated": "2026-06-08",
+      "dueDate": "2026-06-22",
+      "paymentMethod": "Cash"
+    },
+    {
+      "id": "INV-1182",
+      "invoiceNumber": "INV/2026/01883",
+      "customerId": "CST-001",
+      "customerName": "Apex Bakeries Ltd",
+      "items": [
+        {
+          "productName": "Flour",
+          "quantity": 100,
+          "unit": "KG",
+          "pricePerUnit": 1600,
+          "total": 160000,
+          "costPerUnit": 1125
+        }
+      ],
+      "subtotal": 160000,
+      "tax": 2400,
+      "totalAmount": 162400,
+      "amountPaid": 162400,
+      "status": "Paid",
+      "dateCreated": "2026-06-08",
+      "dueDate": "2026-06-22",
+      "paymentMethod": "Cash"
+    }
+  ],
+  "journals": [
+    {
+      "id": "JRN-111421",
+      "dateTime": "2026-06-08T07:51:09.870Z",
+      "description": "Automatic posting - Sales invoice INV/2026/01883 to customer Apex Confectionery & Baking Group",
+      "referenceId": "INV-1182",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 162400,
+          "credit": 0
+        },
+        {
+          "accountName": "Refined Product revenue",
+          "debit": 0,
+          "credit": 162400
+        },
+        {
+          "accountName": "Cost of Goods Sold (COGS)",
+          "debit": 112500,
+          "credit": 0
+        },
+        {
+          "accountName": "Inventory - Processed Goods",
+          "debit": 0,
+          "credit": 112500
+        }
+      ]
+    },
+    {
+      "id": "JRN-608631",
+      "dateTime": "2026-06-08T07:51:04.117Z",
+      "description": "Automatic posting - Sales invoice INV/2026/01651 to customer Apex Confectionery & Baking Group",
+      "referenceId": "INV-6417",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 162400,
+          "credit": 0
+        },
+        {
+          "accountName": "Refined Product revenue",
+          "debit": 0,
+          "credit": 162400
+        },
+        {
+          "accountName": "Cost of Goods Sold (COGS)",
+          "debit": 112500,
+          "credit": 0
+        },
+        {
+          "accountName": "Inventory - Processed Goods",
+          "debit": 0,
+          "credit": 112500
+        }
+      ]
+    },
+    {
+      "id": "JRN-328962",
+      "dateTime": "2026-06-08T07:41:13.889Z",
+      "description": "Automatic posting - Balance receipt of $11250000.00 for invoice INV/2026/0144",
+      "referenceId": "INV-8851",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 11250000,
+          "credit": 0
+        },
+        {
+          "accountName": "Accounts Receivable",
+          "debit": 0,
+          "credit": 11250000
+        }
+      ]
+    },
+    {
+      "id": "JRN-725920",
+      "dateTime": "2026-06-08T07:41:09.918Z",
+      "description": "Automatic posting - Balance receipt of $23000000.00 for invoice INV/2026/0147",
+      "referenceId": "INV-8854",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 23000000,
+          "credit": 0
+        },
+        {
+          "accountName": "Accounts Receivable",
+          "debit": 0,
+          "credit": 23000000
+        }
+      ]
+    },
+    {
+      "id": "JRN-519333",
+      "dateTime": "2026-06-08T05:19:17.840Z",
+      "description": "Automatic posting - Sales invoice INV/2026/01688 to customer Apex Confectionery & Baking Group",
+      "referenceId": "INV-3253",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 162400,
+          "credit": 0
+        },
+        {
+          "accountName": "Refined Product revenue",
+          "debit": 0,
+          "credit": 162400
+        },
+        {
+          "accountName": "Cost of Goods Sold (COGS)",
+          "debit": 112500,
+          "credit": 0
+        },
+        {
+          "accountName": "Inventory - Processed Goods",
+          "debit": 0,
+          "credit": 112500
+        }
+      ]
+    },
+    {
+      "id": "JRN-248413",
+      "dateTime": "2026-06-08T00:45:43.634Z",
+      "description": "Automatic posting - Balance receipt of $9000000.00 for invoice INV/2026/0145",
+      "referenceId": "INV-8852",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 9000000,
+          "credit": 0
+        },
+        {
+          "accountName": "Accounts Receivable",
+          "debit": 0,
+          "credit": 9000000
+        }
+      ]
+    },
+    {
+      "id": "JRN-0010",
+      "dateTime": "2026-06-04T12:00:00Z",
+      "description": "Automatic posting - Sale invoice INV/2026/0144 to Apex Bakeries",
+      "referenceId": "INV-8851",
+      "lines": [
+        {
+          "accountName": "Accounts Receivable",
+          "debit": 13000000,
+          "credit": 0
+        },
+        {
+          "accountName": "Refined Product revenue",
+          "debit": 0,
+          "credit": 13000000
+        },
+        {
+          "accountName": "Cost of Goods Sold (COGS)",
+          "debit": 8800000,
+          "credit": 0
+        },
+        {
+          "accountName": "Inventory - Processed Goods",
+          "debit": 0,
+          "credit": 8800000
+        }
+      ]
+    },
+    {
+      "id": "JRN-0011",
+      "dateTime": "2026-06-04T14:30:00Z",
+      "description": "Automatic posting - Cash receipt from Apex Bakeries (Invoice INV/2026/0144)",
+      "referenceId": "INV-8851",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 1750000,
+          "credit": 0
+        },
+        {
+          "accountName": "Accounts Receivable",
+          "debit": 0,
+          "credit": 1750000
+        }
+      ]
+    },
+    {
+      "id": "JRN-0012",
+      "dateTime": "2026-06-05T15:00:00Z",
+      "description": "Automatic posting - Full cash sale invoice INV/2026/0146 to Mambo Supermarkets",
+      "referenceId": "INV-8853",
+      "lines": [
+        {
+          "accountName": "Cash & Bank Account",
+          "debit": 18600000,
+          "credit": 0
+        },
+        {
+          "accountName": "Refined Product revenue",
+          "debit": 0,
+          "credit": 18600000
+        },
+        {
+          "accountName": "Cost of Goods Sold (COGS)",
+          "debit": 12900000,
+          "credit": 0
+        },
+        {
+          "accountName": "Inventory - Processed Goods",
+          "debit": 0,
+          "credit": 12900000
+        }
+      ]
+    }
+  ],
+  "ledger": [
+    {
+      "accountName": "Cash & Bank Account",
+      "category": "Asset",
+      "balance": 657737200
+    },
+    {
+      "accountName": "Inventory - Raw Materials",
+      "category": "Asset",
+      "balance": 247875000
+    },
+    {
+      "accountName": "Inventory - Processed Goods",
+      "category": "Asset",
+      "balance": 22237500
+    },
+    {
+      "accountName": "Accounts Receivable",
+      "category": "Asset",
+      "balance": 0
+    },
+    {
+      "accountName": "Accounts Payable",
+      "category": "Liability",
+      "balance": 21000000
+    },
+    {
+      "accountName": "Refined Product revenue",
+      "category": "Revenue",
+      "balance": 461237200
+    },
+    {
+      "accountName": "Cost of Goods Sold (COGS)",
+      "category": "Expense",
+      "balance": 281337500
+    },
+    {
+      "accountName": "Operations & Milling Cost",
+      "category": "Expense",
+      "balance": 46750000
+    },
+    {
+      "accountName": "Retained Capital Equity",
+      "category": "Equity",
+      "balance": 360750000
+    }
+  ],
+  "alerts": [
+    {
+      "id": "ALR-001",
+      "type": "Yield Anomaly",
+      "message": "RUN-001 underperformed. Maize flour yield dropped to 72% which was 8% below expected target.",
+      "severity": "danger",
+      "dateTime": "2026-06-03T11:45:00Z",
+      "isRead": true
+    },
+    {
+      "id": "ALR-002",
+      "type": "Overdue Payment",
+      "message": "East Agricultural Distributors is exceeding credit limit with 23,000,000 TZS outstanding, remaining past due date June 1st.",
+      "severity": "warning",
+      "dateTime": "2026-06-01T00:00:00Z",
+      "isRead": true
+    },
+    {
+      "id": "ALR-003",
+      "type": "Low Stock",
+      "message": "Bran stocks (By-product) at Northern Factory Store are below baseline limit (current available 4,000  KG).",
+      "severity": "info",
+      "dateTime": "2026-06-06T15:30:00Z",
+      "isRead": true
+    }
+  ],
+  "distribution": [
+    {
+      "id": "DIS-001",
+      "region": "Nairobi GPO",
+      "agentName": "Karia & Co Distributors",
+      "warehouseName": "Nairobi Central Depot",
+      "productName": "Flour",
+      "quantitySent": 15000,
+      "quantitySold": 12000,
+      "quantityReturned": 150,
+      "quantityDamaged": 50,
+      "quantityOutstanding": 2800,
+      "unit": "KG"
+    },
+    {
+      "id": "DIS-002",
+      "region": "Western Busia",
+      "agentName": "Siafu Agri Agencies",
+      "warehouseName": "Busia Border Silo",
+      "productName": "Flour",
+      "quantitySent": 8000,
+      "quantitySold": 5000,
+      "quantityReturned": 200,
+      "quantityDamaged": 100,
+      "quantityOutstanding": 2700,
+      "unit": "KG"
+    },
+    {
+      "id": "DIS-003",
+      "region": "Coastal Mombasa",
+      "agentName": "Coast Portside Distributors",
+      "warehouseName": "Mombasa Terminal 2",
+      "productName": "Animal Feed",
+      "quantitySent": 12000,
+      "quantitySold": 11000,
+      "quantityReturned": 0,
+      "quantityDamaged": 300,
+      "quantityOutstanding": 700,
+      "unit": "KG"
+    }
+  ],
+  "documents": [
+    {
+      "id": "DOC-001",
+      "name": "Maize Procurement Contract P-99",
+      "category": "Contract",
+      "fileName": "ushirika_raw_contract_p99.pdf",
+      "fileSize": "1.4 MB",
+      "uploadedBy": "Joshua Procurement",
+      "uploadedDate": "2026-05-15",
+      "url": "#"
+    },
+    {
+      "id": "DOC-002",
+      "name": "Quality Assurance Moisture Report June 2",
+      "category": "Quality Report",
+      "fileName": "qa_moisture_wheat_maize_june.xlsx",
+      "fileSize": "720 KB",
+      "uploadedBy": "Storekeeper Maina",
+      "uploadedDate": "2026-06-02",
+      "url": "#"
+    },
+    {
+      "id": "DOC-003",
+      "name": "Leasing Deed Southern Depot 2026",
+      "category": "Contract",
+      "fileName": "lease_southern_feed_depot_2026.pdf",
+      "fileSize": "3.2 MB",
+      "uploadedBy": "Mwanajuma Abdallah",
+      "uploadedDate": "2026-01-10",
+      "url": "#"
+    }
+  ],
+  "auditTrail": [
+    {
+      "id": "AUD-635226",
+      "userName": "Mwanajuma Abdallah (Director)",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Created invoice INV/2026/01883 (Sales Order) for customer Apex Bakeries Ltd, value: $162400.00 under method Cash",
+      "module": "Sales / Distribution Order",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T07:51:09.870Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-368770",
+      "userName": "Mwanajuma Abdallah (Director)",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Created invoice INV/2026/01651 (Sales Order) for customer Apex Bakeries Ltd, value: $162400.00 under method Cash",
+      "module": "Sales / Distribution Order",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T07:51:04.117Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-485035",
+      "userName": "Mwanajuma Abdallah (Director)",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Received payment of $11250000.00 towards invoice INV/2026/0144 for Apex Bakeries Ltd",
+      "module": "Finance Payments Ledger",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T07:41:13.889Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-326491",
+      "userName": "Mwanajuma Abdallah (Director)",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Received payment of $23000000.00 towards invoice INV/2026/0147 for East Agricultural Distributors",
+      "module": "Finance Payments Ledger",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T07:41:09.918Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-388608",
+      "userName": "Mwanajuma Abdallah (Director)",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Created invoice INV/2026/01688 (Sales Order) for customer Apex Bakeries Ltd, value: $162400.00 under method Cash",
+      "module": "Sales / Distribution Order",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T05:19:17.840Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-605811",
+      "userName": "Mwanajuma Abdallah (Director)",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Received payment of $9000000.00 towards invoice INV/2026/0145 for United Animal Feed & Millers",
+      "module": "Finance Payments Ledger",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T00:45:43.634Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-954074",
+      "userName": "Mwanajuma Abdallah",
+      "userId": "USR-0048",
+      "role": "Director",
+      "action": "Logged in to Mombasa Executive Office Desktop client",
+      "module": "Authentication",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T00:43:32.115Z",
+      "ipAddress": "192.168.12.44"
+    },
+    {
+      "id": "AUD-224870",
+      "userName": "System Initialiser",
+      "userId": "SYS-001",
+      "role": "Super Admin",
+      "action": "ERP initial database seed and setup successfully launched",
+      "module": "General",
+      "device": "Desktop Terminal C",
+      "dateTime": "2026-06-08T00:43:32.114Z",
+      "ipAddress": "192.168.12.44"
+    }
+  ],
+  "session": {
+    "userId": "USR-0048",
+    "userName": "Mwanajuma Abdallah (Director)",
+    "role": "Director",
+    "device": "Desktop Terminal C",
+    "loginSession": "SESS-8842",
+    "dateTime": "2026-06-07T22:32:00Z",
+    "ipAddress": "192.168.12.44"
+  }
+}

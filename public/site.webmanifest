@@ -1,0 +1,22 @@
+{
+  "name": "Grain ERP",
+  "short_name": "Grain ERP",
+  "description": "Grain processing ERP for inventory, sales, production, finance, and documents.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#061a2d",
+  "theme_color": "#061a2d",
+  "icons": [
+    {
+      "src": "/grain-erp-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

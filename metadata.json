@@ -1,0 +1,6 @@
+{
+  "name": "Enterprise Grain Processing ERP",
+  "description": "An enterprise-grade grain processing ERP with inventory tracking, material transformation yielding, automated accounting, supplier diagnostics, customer credit intelligence, and an Executive AI Assistant.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
