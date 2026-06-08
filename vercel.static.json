@@ -4,7 +4,7 @@
   "redirects": [
     {
       "source": "/installers/GrainERP-USB-Installer-v1.0.2.zip",
-      "destination": "https://raw.githubusercontent.com/Wasley-Dev/Grain-ERP/main/installers/GrainERP-USB-Installer.zip?v=1.0.2-usb",
+      "destination": "https://raw.githubusercontent.com/Wasley06/enterprise-grain-processing-erp/main/release/GrainERP-USB-Installer.zip?v=1.0.2-usb",
       "permanent": false
     },
     {
