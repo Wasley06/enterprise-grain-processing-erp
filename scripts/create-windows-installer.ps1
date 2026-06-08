@@ -16,7 +16,7 @@ try {
     Remove-Item -LiteralPath $payload -Recurse -Force
   }
   New-Item -ItemType Directory -Path $payload | Out-Null
-  Copy-Item -LiteralPath $portableZip -Destination (Join-Path $payload "GrainERP-Windows-Portable.zip") -Force
+  Copy-Item -LiteralPath $portableZip -Destination (Join-Path $payload "PORTABLE.ZIP") -Force
 
   @'
 @echo off
@@ -31,7 +31,7 @@ if errorlevel 1 (
 
 set "INSTALL_DIR=%LOCALAPPDATA%\Grain ERP"
 if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
-powershell -NoProfile -ExecutionPolicy Bypass -Command "Expand-Archive -LiteralPath '%~dp0GrainERP-Windows-Portable.zip' -DestinationPath '%INSTALL_DIR%' -Force"
+powershell -NoProfile -ExecutionPolicy Bypass -Command "Expand-Archive -LiteralPath '%~dp0PORTABLE.ZIP' -DestinationPath '%INSTALL_DIR%' -Force"
 
 set "APP_DIR=%INSTALL_DIR%\GrainERP-Windows-Portable"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ws=New-Object -ComObject WScript.Shell; $s=$ws.CreateShortcut([Environment]::GetFolderPath('Desktop') + '\Grain ERP.lnk'); $s.TargetPath='%APP_DIR%\Start-Grain-ERP.bat'; $s.WorkingDirectory='%APP_DIR%'; $s.Save()"
@@ -40,7 +40,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command "$start=[Environment]::Ge
 echo Grain ERP installed successfully.
 echo Open it from the Desktop shortcut or Start Menu.
 pause
-'@ | Set-Content -Path (Join-Path $payload "Install-Grain-ERP.bat") -Encoding ASCII
+'@ | Set-Content -Path (Join-Path $payload "INSTALL.BAT") -Encoding ASCII
 
   @'
 @echo off
@@ -51,7 +51,7 @@ if exist "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Grain ERP.lnk" del "%A
 if exist "%INSTALL_DIR%" rmdir /s /q "%INSTALL_DIR%"
 echo Grain ERP removed.
 pause
-'@ | Set-Content -Path (Join-Path $payload "Uninstall-Grain-ERP.bat") -Encoding ASCII
+'@ | Set-Content -Path (Join-Path $payload "UNINST.BAT") -Encoding ASCII
 
   @"
 [Version]
@@ -71,15 +71,15 @@ DisplayLicense=
 FinishMessage=Grain ERP installer finished.
 TargetName=$installerExe
 FriendlyName=Grain ERP Installer
-AppLaunched=Install-Grain-ERP.bat
+AppLaunched=INSTALL.BAT
 PostInstallCmd=<None>
 AdminQuietInstCmd=
 UserQuietInstCmd=
 SourceFiles=SourceFiles
 [Strings]
-FILE0="GrainERP-Windows-Portable.zip"
-FILE1="Install-Grain-ERP.bat"
-FILE2="Uninstall-Grain-ERP.bat"
+FILE0="PORTABLE.ZIP"
+FILE1="INSTALL.BAT"
+FILE2="UNINST.BAT"
 [SourceFiles]
 SourceFiles0=$payload
 [SourceFiles0]
