@@ -787,6 +787,52 @@ button {
   background: #b91c1c;
 }
 
+.update-prompt {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(214, 168, 58, 0.45);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(255, 250, 232, 0.96)),
+    #ffffff;
+  padding: 1rem;
+  box-shadow: 0 18px 46px rgba(15, 23, 42, 0.1);
+}
+
+.update-prompt-icon {
+  display: inline-flex;
+  width: 2.75rem;
+  height: 2.75rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  background: #d6a83a;
+  color: #061a2d;
+}
+
+.update-prompt h3 {
+  margin: 0;
+  color: #061a2d;
+  font-size: 0.98rem;
+  font-weight: 950;
+}
+
+.update-prompt p {
+  margin-top: 0.25rem;
+  color: #64748b;
+  font-size: 0.84rem;
+  font-weight: 700;
+}
+
+.update-prompt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
 .chart-hover-line,
 .chart-tooltip {
   opacity: 0;
@@ -1005,6 +1051,15 @@ button {
 [data-theme="dark"] .chart-period-control:hover,
 [data-theme="dark"] .chart-period-control:focus-within {
   border-color: #d6a83a !important;
+}
+
+[data-theme="dark"] .update-prompt {
+  background: #111827 !important;
+  border-color: #d6a83a !important;
+}
+
+[data-theme="dark"] .update-prompt h3 {
+  color: #f8fafc !important;
 }
 
 [data-theme="dark"] .mini-table td,

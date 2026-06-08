@@ -45,6 +45,7 @@ import {
 import Sidebar, { NavItemId } from "./components/Sidebar";
 import logoUrl from "./assets/grain-erp-logo.png";
 import whatsappIconUrl from "./assets/whatsapp-icon.jpg";
+import { APP_VERSION, INSTALLERS_URL, LIVE_APP_ORIGIN } from "./appVersion";
 import {
   Customer,
   DistributionRecord,
@@ -78,6 +79,12 @@ type ERPState = {
 
 type Language = "en" | "sw";
 type ThemeMode = "light" | "dark";
+type UpdateInfo = {
+  version: string;
+  releasedAt?: string;
+  installerUrl?: string;
+  notes?: string;
+};
 type AIMessage = { query: string; answer: string; loading: boolean; suggestedTab?: NavItemId; suggestedLabel?: string };
 type AuthPhase = "loading" | "login" | "app";
 
@@ -137,6 +144,15 @@ const copy: Record<Language, Record<string, string>> = {
     thisMonth: "This Month",
     lastMonth: "Last Month",
     last90Days: "Last 90 Days",
+    updateAvailable: "System update available",
+    updateCopy: "A newer Grain ERP version is ready. Update now or let the system update automatically next time it opens.",
+    currentVersion: "Current version",
+    newVersion: "New version",
+    updateNow: "Update now",
+    updateNextOpen: "Auto update next time",
+    later: "Later",
+    updateScheduled: "Update scheduled for the next time Grain ERP opens.",
+    openingInstaller: "Opening the latest installer download page.",
     orderId: "Order ID",
     amount: "Amount",
     status: "Status",
@@ -240,6 +256,15 @@ const copy: Record<Language, Record<string, string>> = {
     thisMonth: "Mwezi Huu",
     lastMonth: "Mwezi Uliopita",
     last90Days: "Siku 90 Zilizopita",
+    updateAvailable: "Toleo jipya lipo",
+    updateCopy: "Toleo jipya la Grain ERP liko tayari. Sasisha sasa au mfumo ujisasishe utakapo funguliwa tena.",
+    currentVersion: "Toleo la sasa",
+    newVersion: "Toleo jipya",
+    updateNow: "Sasisha sasa",
+    updateNextOpen: "Sasisha ukifungua tena",
+    later: "Baadaye",
+    updateScheduled: "Sasisho limepangwa kwa ufunguzi ujao wa Grain ERP.",
+    openingInstaller: "Inafungua ukurasa wa kupakua installer mpya.",
     orderId: "Namba ya Oda",
     amount: "Kiasi",
     status: "Hali",
@@ -325,6 +350,7 @@ export default function App() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
+  const [updateInfo, setUpdateInfo] = useState<UpdateInfo | null>(null);
   const [query, setQuery] = useState("");
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => localStorage.getItem("erp.sidebar") === "collapsed");
   const [language, setLanguage] = useState<Language>(() => (localStorage.getItem("erp.language") === "sw" ? "sw" : "en"));
@@ -477,11 +503,74 @@ export default function App() {
   const formatQty = (quantity: number, unit: string) => `${quantity.toLocaleString("en-US")} ${unit}`;
   const t = (key: string) => copy[language][key] || key;
 
+  const isLocalInstall = () => ["localhost", "127.0.0.1"].includes(window.location.hostname);
+
+  const applyUpdate = async (info: UpdateInfo, automatic = false) => {
+    localStorage.removeItem("erp.updateOnNextOpen");
+    setUpdateInfo(null);
+
+    if (isLocalInstall()) {
+      setNotice(t("openingInstaller"));
+      window.open(info.installerUrl || INSTALLERS_URL, "_blank", "noopener,noreferrer");
+      return;
+    }
+
+    if ("serviceWorker" in navigator) {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      await Promise.all(registrations.map((registration) => registration.unregister()));
+    }
+    if ("caches" in window) {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+    }
+
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.set("updated", info.version);
+    if (automatic) nextUrl.searchParams.set("auto", "1");
+    window.location.replace(nextUrl.toString());
+  };
+
+  const scheduleUpdate = (info: UpdateInfo) => {
+    localStorage.setItem("erp.updateOnNextOpen", info.version);
+    setUpdateInfo(null);
+    setNotice(t("updateScheduled"));
+  };
+
   useEffect(() => {
     if (authPhase !== "loading") return;
     const loadingTimer = window.setTimeout(() => setAuthPhase((phase) => phase === "loading" ? "login" : phase), 8000);
     return () => window.clearTimeout(loadingTimer);
   }, [authPhase]);
+
+  useEffect(() => {
+    let cancelled = false;
+    const checkForUpdates = async () => {
+      try {
+        const versionUrl = `${isLocalInstall() ? LIVE_APP_ORIGIN : ""}/app-version.json?ts=${Date.now()}`;
+        const res = await fetch(versionUrl, { cache: "no-store" });
+        if (!res.ok) return;
+        const info = await res.json() as UpdateInfo;
+        if (!info.version || info.version === APP_VERSION || cancelled) return;
+
+        const scheduledVersion = localStorage.getItem("erp.updateOnNextOpen");
+        if (scheduledVersion === info.version) {
+          await applyUpdate(info, true);
+          return;
+        }
+
+        setUpdateInfo(info);
+      } catch {
+        // Update checks are best-effort so offline users can keep working.
+      }
+    };
+
+    checkForUpdates();
+    const timer = window.setInterval(checkForUpdates, 30 * 60 * 1000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, []);
 
   const handleLogin = (event: React.FormEvent) => {
     event.preventDefault();
@@ -920,6 +1009,15 @@ export default function App() {
           <div className="mx-auto max-w-[1500px] space-y-7 px-5 py-7 lg:px-9">
             {notice && <Toast message={notice} success />}
             {error && <Toast message={error} onClose={() => setError(null)} />}
+            {updateInfo && (
+              <UpdatePrompt
+                info={updateInfo}
+                t={t}
+                onUpdateNow={() => applyUpdate(updateInfo)}
+                onNextOpen={() => scheduleUpdate(updateInfo)}
+                onLater={() => setUpdateInfo(null)}
+              />
+            )}
             {saving && (
               <div className="fixed right-5 top-5 z-50 flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-600 shadow-lg">
                 <Loader2 className="h-4 w-4 animate-spin text-emerald-500" /> Saving
@@ -1257,6 +1355,45 @@ function Toast({ message, success, onClose }: { message: string; success?: boole
         )}
       </div>
     </div>
+  );
+}
+
+function UpdatePrompt({
+  info,
+  t,
+  onUpdateNow,
+  onNextOpen,
+  onLater
+}: {
+  info: UpdateInfo;
+  t: (key: string) => string;
+  onUpdateNow: () => void;
+  onNextOpen: () => void;
+  onLater: () => void;
+}) {
+  return (
+    <section className="update-prompt" role="status" aria-live="polite">
+      <div className="update-prompt-icon">
+        <RefreshCw className="h-5 w-5" />
+      </div>
+      <div className="min-w-0 flex-1">
+        <h3>{t("updateAvailable")}</h3>
+        <p>{t("updateCopy")}</p>
+        <div className="mt-3 flex flex-wrap gap-2 text-xs font-black">
+          <span>{t("currentVersion")}: {APP_VERSION}</span>
+          <span>{t("newVersion")}: {info.version}</span>
+        </div>
+      </div>
+      <div className="update-prompt-actions">
+        <button type="button" className="btn-primary" onClick={onUpdateNow}>
+          <RefreshCw className="h-4 w-4" /> {t("updateNow")}
+        </button>
+        <button type="button" className="btn-secondary" onClick={onNextOpen}>{t("updateNextOpen")}</button>
+        <button type="button" className="icon-button" onClick={onLater} aria-label={t("later")}>
+          <X className="h-4 w-4" />
+        </button>
+      </div>
+    </section>
   );
 }
 

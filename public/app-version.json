@@ -1,0 +1,6 @@
+{
+  "version": "1.0.1",
+  "releasedAt": "2026-06-09T00:00:00+03:00",
+  "installerUrl": "https://enterprise-grain-processing-erp.vercel.app/installers/",
+  "notes": "Adds update prompts for web, desktop, and Android users."
+}
