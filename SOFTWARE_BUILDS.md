@@ -1,5 +1,23 @@
 # Grain ERP Software Builds
 
+## Live Installer Source
+
+The canonical installer source is the live Vercel alias:
+
+```text
+https://enterprise-grain-processing-erp.vercel.app/installers/
+```
+
+Direct Vercel downloads:
+
+```text
+https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Windows-Installer.exe
+https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Android-debug.apk
+https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Windows-Portable.zip
+```
+
+The Vercel URLs redirect to the GitHub Release assets so the public alias remains the stable installer source.
+
 ## Windows Desktop
 
 Desktop app support has been added with Electron.

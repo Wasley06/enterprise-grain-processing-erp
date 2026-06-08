@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Grain ERP Installers</title>
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <style>
+      :root {
+        color-scheme: light;
+        --blue: #061a2d;
+        --gold: #d6a83a;
+        --text: #0f172a;
+        --muted: #64748b;
+        --border: #dbe4ef;
+        --bg: #f8fafc;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 20% 10%, rgba(214, 168, 58, 0.2), transparent 24rem),
+          linear-gradient(135deg, #eef7ff 0%, var(--bg) 55%, #fff8e1 100%);
+        color: var(--text);
+        font-family: Inter, Arial, sans-serif;
+      }
+
+      main {
+        width: min(980px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        margin-bottom: 28px;
+      }
+
+      img {
+        width: 78px;
+        height: 78px;
+        object-fit: contain;
+      }
+
+      h1 {
+        margin: 0;
+        color: var(--blue);
+        font-size: clamp(2rem, 5vw, 3.25rem);
+        line-height: 1;
+      }
+
+      p {
+        color: var(--muted);
+        font-weight: 700;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 18px;
+      }
+
+      .card {
+        display: flex;
+        min-height: 190px;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 22px;
+        box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+      }
+
+      h2 {
+        margin: 0;
+        color: var(--blue);
+      }
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        border-radius: 12px;
+        background: var(--gold);
+        color: var(--blue);
+        font-weight: 900;
+        text-decoration: none;
+      }
+
+      .secondary {
+        background: var(--blue);
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="/grain-erp-logo.png" alt="Grain ERP logo" />
+        <div>
+          <h1>Grain ERP Installers</h1>
+          <p>Download the latest desktop and Android installers from the live Vercel alias.</p>
+        </div>
+      </header>
+
+      <section class="grid">
+        <article class="card">
+          <div>
+            <h2>Windows Desktop</h2>
+            <p>Installer for Windows computers.</p>
+          </div>
+          <a href="https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Windows-Installer.exe" download>Download EXE</a>
+        </article>
+
+        <article class="card">
+          <div>
+            <h2>Android Mobile</h2>
+            <p>APK installer for Android phones.</p>
+          </div>
+          <a href="https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Android-debug.apk" download>Download APK</a>
+        </article>
+
+        <article class="card">
+          <div>
+            <h2>Windows Portable</h2>
+            <p>Backup ZIP package for manual installation.</p>
+          </div>
+          <a class="secondary" href="https://enterprise-grain-processing-erp.vercel.app/installers/GrainERP-Windows-Portable.zip" download>Download ZIP</a>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+android/
+android-sdk/
+android-commandlinetools.zip
+electron/
+release/
+scripts/
+node_modules/
+.git/
+*.log
+*.map
+SOFTWARE_BUILDS.md
