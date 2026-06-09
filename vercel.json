@@ -4,7 +4,17 @@
   "redirects": [
     {
       "source": "/installers/latest.yml",
-      "destination": "https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.6-desktop/latest.yml",
+      "destination": "https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.7-desktop/latest.yml",
+      "permanent": false
+    },
+    {
+      "source": "/installers/Grain.ERP.Setup.1.0.7.exe",
+      "destination": "https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.7-desktop/Grain.ERP.Setup.1.0.7.exe",
+      "permanent": false
+    },
+    {
+      "source": "/installers/GrainERP-Desktop-Setup-v1.0.7.exe",
+      "destination": "https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.7-desktop/Grain.ERP.Setup.1.0.7.exe",
       "permanent": false
     },
     {

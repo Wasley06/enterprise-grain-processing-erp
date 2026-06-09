@@ -714,6 +714,82 @@ function documentHtml(req: Request, invoice: Invoice, type: "invoice" | "receipt
 </html>`;
 }
 
+function escapePdfText(value: string) {
+  return value.replace(/\\/g, "\\\\").replace(/\(/g, "\\(").replace(/\)/g, "\\)");
+}
+
+function createSimplePdf(title: string, lines: string[]) {
+  const pageWidth = 595;
+  const safeLines = lines.flatMap((line) => {
+    const chunks: string[] = [];
+    for (let i = 0; i < line.length; i += 86) chunks.push(line.slice(i, i + 86));
+    return chunks.length ? chunks : [""];
+  }).slice(0, 34);
+  const textOps = safeLines.map((line, index) => `BT /F1 10 Tf 42 ${708 - index * 18} Td (${escapePdfText(line)}) Tj ET`).join("\n");
+  const stream = [
+    "q",
+    "0.024 0.102 0.176 rg",
+    `0 752 ${pageWidth} 90 re f`,
+    "0.839 0.659 0.227 rg",
+    `0 746 ${pageWidth} 6 re f`,
+    "1 1 1 rg",
+    `BT /F1 24 Tf 42 790 Td (${escapePdfText("Grain ERP")}) Tj ET`,
+    `BT /F1 12 Tf 42 770 Td (${escapePdfText(title)}) Tj ET`,
+    "0.024 0.102 0.176 rg",
+    textOps,
+    "Q"
+  ].join("\n");
+  const objects = [
+    "<< /Type /Catalog /Pages 2 0 R >>",
+    "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+    `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${pageWidth} 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>`,
+    "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+    `<< /Length ${stream.length} >>\nstream\n${stream}\nendstream`
+  ];
+  let pdf = "%PDF-1.4\n";
+  const offsets = [0];
+  objects.forEach((object, index) => {
+    offsets.push(pdf.length);
+    pdf += `${index + 1} 0 obj\n${object}\nendobj\n`;
+  });
+  const xrefOffset = pdf.length;
+  pdf += `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`;
+  offsets.slice(1).forEach((offset) => {
+    pdf += `${String(offset).padStart(10, "0")} 00000 n \n`;
+  });
+  pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
+  return pdf;
+}
+
+function documentPdf(req: Request, invoice: Invoice, type: "invoice" | "receipt") {
+  const title = type === "receipt" ? "RECEIPT" : "INVOICE";
+  const origin = `${req.protocol}://${req.get("host")}`;
+  const documentUrl = `${origin}/api/erp/document/${type}/${encodeURIComponent(invoice.id)}`;
+  const paid = type === "receipt" ? invoice.amountPaid : invoice.totalAmount;
+  const balance = Math.max(invoice.totalAmount - invoice.amountPaid, 0);
+  return createSimplePdf(`${title} ${invoice.invoiceNumber}`, [
+    `Grain ERP ${title}`,
+    "Publisher: Wasley Inc.",
+    `Document No: ${invoice.invoiceNumber}`,
+    `Date: ${invoice.dateCreated}`,
+    `Customer: ${invoice.customerName}`,
+    `Status: ${invoice.status}`,
+    "Currency: TZS",
+    "",
+    "Items",
+    ...invoice.items.map((item) => `${item.productName} | ${formatQty(item.quantity, item.unit)} | Unit ${formatTZS(item.pricePerUnit)} | Total ${formatTZS(item.total)}`),
+    "",
+    `Subtotal: ${formatTZS(invoice.subtotal)}`,
+    `Tax: ${formatTZS(invoice.tax)}`,
+    `${type === "receipt" ? "Amount Paid" : "Amount Due"}: ${formatTZS(paid)}`,
+    `Balance: ${formatTZS(balance)}`,
+    `Grand Total: ${formatTZS(invoice.totalAmount)}`,
+    "",
+    `QR Preview: ${documentUrl}`,
+    "Terms: All amounts are recorded in TZS. Keep this PDF for payment and delivery reference."
+  ]);
+}
+
 // 1. Fetch entire ERP data snapshot
 app.get("/api/erp/state", (req: Request, res: Response) => {
   res.json({
@@ -742,8 +818,10 @@ app.get("/api/erp/document/:type/:id", (req: Request, res: Response) => {
   if (!invoice) {
     return res.status(404).send("Document not found");
   }
-  res.setHeader("Content-Type", "text/html; charset=utf-8");
-  res.send(documentHtml(req, invoice, type));
+  const filename = `${type}-${invoice.invoiceNumber.replace(/\//g, "-")}.pdf`;
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader("Content-Disposition", `inline; filename="${filename}"`);
+  res.send(Buffer.from(documentPdf(req, invoice, type), "binary"));
 });
 
 // 2. Perform raw material purchase operation
@@ -1696,9 +1774,9 @@ app.post("/api/erp/add-supplier", (req: Request, res: Response) => {
 
 // 7. Onboard new customer credit score engine
 app.post("/api/erp/add-customer", (req: Request, res: Response) => {
-  const { name, company, phone, email, tin, address, requestedLimit } = req.body;
+  const { name, company, phone, whatsapp, email, tin, address, requestedLimit } = req.body;
 
-  if (!name || !company || !tin) {
+  if (!name || !phone) {
     return res.status(400).json({ status: "error", message: "Missing customer registration details" });
   }
 
@@ -1711,10 +1789,11 @@ app.post("/api/erp/add-customer", (req: Request, res: Response) => {
   const newCust: Customer = {
     id: "CST-" + Math.floor(100 + Math.random() * 900),
     name,
-    company,
+    company: company || name,
     phone: phone || "+254",
+    whatsapp: whatsapp || phone || "",
     email: email || "office@corp.co.ke",
-    tin,
+    tin: tin || "N/A",
     address: address || "Kenya Business District",
     creditScore: defaultScore,
     riskLevel: risk,
@@ -1727,7 +1806,7 @@ app.post("/api/erp/add-customer", (req: Request, res: Response) => {
   };
 
   db.customers.push(newCust);
-  db.logAudit(db.session.userName, db.session.userId, db.session.role, `Registered customer ${company} of limit value $${limit}`, "Customer Registry");
+  db.logAudit(db.session.userName, db.session.userId, db.session.role, `Registered customer ${company || name} of limit value ${limit} TZS`, "Customer Registry");
   db.save();
 
   res.json({ status: "success", data: newCust });

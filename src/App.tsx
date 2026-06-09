@@ -19,15 +19,19 @@ import {
   Eye,
   FileText,
   Fullscreen,
+  Globe,
+  KeyRound,
   Languages,
   Loader2,
   Mail,
+  MapPin,
   Moon,
   Package,
   Plus,
   Printer,
   QrCode,
   RefreshCw,
+  RotateCcw,
   Search,
   Send,
   ShieldCheck,
@@ -92,8 +96,13 @@ type AdminUser = {
   id: string;
   name: string;
   username: string;
+  password: string;
+  whatsapp: string;
   role: string;
   access: NavItemId[];
+  ipAddress: string;
+  geoLocation: string;
+  lastLogin?: string;
 };
 
 const copy: Record<Language, Record<string, string>> = {
@@ -367,12 +376,29 @@ export default function App() {
   const [aiMessages, setAiMessages] = useState<AIMessage[]>([]);
   const [adminUsers, setAdminUsers] = useState<AdminUser[]>(() => {
     const saved = localStorage.getItem("erp.adminUsers");
-    return saved ? JSON.parse(saved) : [{
+    const normalizeUser = (user: Partial<AdminUser>): AdminUser => ({
+      id: user.id || `USR-${Date.now()}`,
+      name: user.name || user.username || "User",
+      username: user.username || user.name || "user",
+      password: user.password || "ChangeMe123",
+      whatsapp: user.whatsapp || "",
+      role: user.role || "Viewer",
+      access: user.access || ["dashboard"],
+      ipAddress: user.ipAddress || "Not captured",
+      geoLocation: user.geoLocation || "Not captured",
+      lastLogin: user.lastLogin || ""
+    });
+    return saved ? JSON.parse(saved).map(normalizeUser) : [{
       id: "USR-WASLEY",
       name: "Wasley",
       username: "Wasley",
+      password: "121973",
+      whatsapp: "",
       role: "Super Admin",
-      access: ["dashboard", "alerts", "inventory", "production", "sales", "orders", "customers", "suppliers", "finance", "documents", "settings"]
+      access: ["dashboard", "alerts", "inventory", "production", "sales", "orders", "customers", "suppliers", "finance", "documents", "settings"],
+      ipAddress: "Local admin",
+      geoLocation: "System owner",
+      lastLogin: ""
     }];
   });
 
@@ -575,11 +601,18 @@ export default function App() {
 
   const handleLogin = (event: React.FormEvent) => {
     event.preventDefault();
-    if (loginForm.username.trim() === "Wasley" && loginForm.password === currentPassword) {
+    const username = loginForm.username.trim();
+    const matchedUser = adminUsers.find((user) => user.username.toLowerCase() === username.toLowerCase());
+    if ((username === "Wasley" && loginForm.password === currentPassword) || matchedUser?.password === loginForm.password) {
+      const user = matchedUser || adminUsers.find((item) => item.username === "Wasley");
+      const displayName = user?.name || username || "Wasley";
       setLoginError("");
-      setCurrentUser("Wasley");
+      setCurrentUser(displayName);
       localStorage.setItem("erp.authenticated", "true");
-      localStorage.setItem("erp.currentUser", "Wasley");
+      localStorage.setItem("erp.currentUser", displayName);
+      if (user) {
+        setAdminUsers((users) => users.map((item) => item.id === user.id ? { ...item, lastLogin: new Date().toISOString() } : item));
+      }
       setAuthPhase("app");
       return;
     }
@@ -755,6 +788,7 @@ export default function App() {
         name: customerForm.name,
         company: customerForm.company || customerForm.name,
         phone: customerForm.phone,
+        whatsapp: customerForm.whatsapp || customerForm.phone,
         email: customerForm.email,
         tin: customerForm.tin,
         address: customerForm.address,
@@ -1611,6 +1645,44 @@ function createSimplePdf(title: string, lines: string[]) {
   });
   pdf += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`;
   return pdf;
+}
+
+function createInvoiceReceiptPdf({
+  invoice,
+  type,
+  formatTZS,
+  formatQty
+}: {
+  invoice: Invoice;
+  type: "invoice" | "receipt";
+  formatTZS: (value: number) => string;
+  formatQty: (quantity: number, unit: string) => string;
+}) {
+  const title = type === "receipt" ? "RECEIPT" : "INVOICE";
+  const paid = type === "receipt" ? invoice.amountPaid : invoice.totalAmount;
+  const balance = Math.max(invoice.totalAmount - invoice.amountPaid, 0);
+  const lines = [
+    `Grain ERP ${title}`,
+    "Publisher: Wasley Inc.",
+    `Document No: ${invoice.invoiceNumber}`,
+    `Date: ${invoice.dateCreated}`,
+    `Customer: ${invoice.customerName}`,
+    `Status: ${invoice.status}`,
+    "Currency: TZS",
+    "",
+    "Items",
+    ...invoice.items.map((item) => `${item.productName} | ${formatQty(item.quantity, item.unit)} | Unit ${formatTZS(item.pricePerUnit)} | Total ${formatTZS(item.total)}`),
+    "",
+    `Subtotal: ${formatTZS(invoice.subtotal)}`,
+    `Tax: ${formatTZS(invoice.tax)}`,
+    `${type === "receipt" ? "Amount Paid" : "Amount Due"}: ${formatTZS(paid)}`,
+    `Balance: ${formatTZS(balance)}`,
+    `Grand Total: ${formatTZS(invoice.totalAmount)}`,
+    "",
+    `QR Preview: ${getPublicDocumentUrl(type, invoice.id)}`,
+    "Terms: All amounts are recorded in TZS. Keep this PDF for payment and delivery reference."
+  ];
+  return createSimplePdf(`${title} ${invoice.invoiceNumber}`, lines);
 }
 
 function downloadFile(filename: string, content: BlobPart, type: string) {
@@ -2760,7 +2832,16 @@ function DocumentsView({ documents, docFilter, setDocFilter, documentForm, setDo
       downloadFile(`${baseName}.doc`, content, "application/msword;charset=utf-8");
       return;
     }
-    downloadFile(`${baseName}.html`, content, "text/html;charset=utf-8");
+    downloadFile(`${baseName}.pdf`, createSimplePdf(doc.name, [
+      doc.name,
+      `Category: ${doc.category}`,
+      `File: ${doc.fileName}`,
+      `Uploaded by: ${doc.uploadedBy}`,
+      `Uploaded: ${doc.uploadedDate}`,
+      "",
+      "This document record was generated by Grain ERP.",
+      "Currency: TZS"
+    ]), "application/pdf");
   };
   return (
     <div className="grid gap-6 xl:grid-cols-[0.75fr_1.25fr]">
@@ -2863,6 +2944,42 @@ function OrdersView({ invoices, markInvoicePaid, formatTZS, formatQty }: any) {
   );
 }
 
+function generatePassword() {
+  return `Grain${Math.floor(100000 + Math.random() * 900000)}!`;
+}
+
+function normalizePhoneForWhatsApp(phone: string) {
+  const digits = phone.replace(/\D/g, "");
+  if (!digits) return "";
+  if (digits.startsWith("0")) return `255${digits.slice(1)}`;
+  return digits;
+}
+
+async function getClientIpAddress() {
+  try {
+    const response = await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
+    if (!response.ok) return "Not captured";
+    const data = await response.json();
+    return data.ip || "Not captured";
+  } catch {
+    return "Not captured";
+  }
+}
+
+function getBrowserGeoLocation() {
+  return new Promise<string>((resolve) => {
+    if (!navigator.geolocation) {
+      resolve("Not captured");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(`${position.coords.latitude.toFixed(5)}, ${position.coords.longitude.toFixed(5)}`),
+      () => resolve("Permission not granted"),
+      { enableHighAccuracy: false, timeout: 7000, maximumAge: 300000 }
+    );
+  });
+}
+
 function SettingsView({ state, adminUsers, setAdminUsers }: { state: ERPState; adminUsers: AdminUser[]; setAdminUsers: React.Dispatch<React.SetStateAction<AdminUser[]>> }) {
   const roles = ["Super Admin", "Admin", "Manager", "Warehouse", "Sales", "Finance", "Viewer"];
   const [settings, setSettings] = useState(() => {
@@ -2877,7 +2994,7 @@ function SettingsView({ state, adminUsers, setAdminUsers }: { state: ERPState; a
       whatsappNotifications: true
     };
   });
-  const [newUser, setNewUser] = useState({ name: "", username: "", role: "Viewer" });
+  const [newUser, setNewUser] = useState({ name: "", username: "", password: generatePassword(), whatsapp: "", role: "Viewer", ipAddress: "", geoLocation: "" });
   const navAccess: NavItemId[] = ["dashboard", "alerts", "inventory", "production", "sales", "orders", "customers", "suppliers", "finance", "documents", "settings"];
   const updateSetting = (key: string) => {
     setSettings((prev: any) => {
@@ -2886,17 +3003,40 @@ function SettingsView({ state, adminUsers, setAdminUsers }: { state: ERPState; a
       return next;
     });
   };
-  const addUser = (event: React.FormEvent) => {
+  const addUser = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!newUser.name || !newUser.username) return;
-    setAdminUsers((users) => [...users, { id: `USR-${Date.now()}`, ...newUser, access: ["dashboard"] }]);
-    setNewUser({ name: "", username: "", role: "Viewer" });
+    if (!newUser.name || !newUser.username || !newUser.password) return;
+    const [ipAddress, geoLocation] = await Promise.all([
+      newUser.ipAddress ? Promise.resolve(newUser.ipAddress) : getClientIpAddress(),
+      newUser.geoLocation ? Promise.resolve(newUser.geoLocation) : getBrowserGeoLocation()
+    ]);
+    setAdminUsers((users) => [...users, { id: `USR-${Date.now()}`, ...newUser, ipAddress, geoLocation, access: ["dashboard"], lastLogin: "" }]);
+    setNewUser({ name: "", username: "", password: generatePassword(), whatsapp: "", role: "Viewer", ipAddress: "", geoLocation: "" });
   };
   const toggleAccess = (userId: string, area: NavItemId) => {
     setAdminUsers((users) => users.map((user) => user.id === userId ? {
       ...user,
       access: user.access.includes(area) ? user.access.filter((item) => item !== area) : [...user.access, area]
     } : user));
+  };
+  const updateUser = (userId: string, updates: Partial<AdminUser>) => {
+    setAdminUsers((users) => users.map((user) => user.id === userId ? { ...user, ...updates } : user));
+  };
+  const resetUserPassword = (userId: string) => {
+    updateUser(userId, { password: generatePassword() });
+  };
+  const sendCredentials = (user: AdminUser) => {
+    const phone = normalizePhoneForWhatsApp(user.whatsapp || "");
+    const text = [
+      "Grain ERP login credentials",
+      `Name: ${user.name}`,
+      `Username: ${user.username}`,
+      `Password: ${user.password}`,
+      `Role: ${user.role}`,
+      `System: ${LIVE_APP_ORIGIN}`,
+      "Please change your password after first login."
+    ].join("\n");
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -2919,10 +3059,15 @@ function SettingsView({ state, adminUsers, setAdminUsers }: { state: ERPState; a
         <form onSubmit={addUser} className="mb-4 grid gap-3 sm:grid-cols-3">
           <input className={inputClass} placeholder="Full name" value={newUser.name} onChange={(event) => setNewUser((prev) => ({ ...prev, name: event.target.value }))} />
           <input className={inputClass} placeholder="Username" value={newUser.username} onChange={(event) => setNewUser((prev) => ({ ...prev, username: event.target.value }))} />
+          <input className={inputClass} placeholder="WhatsApp e.g. +255..." value={newUser.whatsapp} onChange={(event) => setNewUser((prev) => ({ ...prev, whatsapp: event.target.value }))} />
+          <input className={inputClass} placeholder="Password" value={newUser.password} onChange={(event) => setNewUser((prev) => ({ ...prev, password: event.target.value }))} />
+          <input className={inputClass} placeholder="IP address (auto if blank)" value={newUser.ipAddress} onChange={(event) => setNewUser((prev) => ({ ...prev, ipAddress: event.target.value }))} />
+          <input className={inputClass} placeholder="Geo location (auto if blank)" value={newUser.geoLocation} onChange={(event) => setNewUser((prev) => ({ ...prev, geoLocation: event.target.value }))} />
           <select className={inputClass} value={newUser.role} onChange={(event) => setNewUser((prev) => ({ ...prev, role: event.target.value }))}>
             {roles.map((role) => <option key={role}>{role}</option>)}
           </select>
-          <button className="btn-primary justify-center sm:col-span-3" type="submit"><UserPlus className="h-4 w-4" /> Add User</button>
+          <button className="btn-secondary justify-center" type="button" onClick={() => setNewUser((prev) => ({ ...prev, password: generatePassword() }))}><KeyRound className="h-4 w-4" /> Generate Password</button>
+          <button className="btn-primary justify-center" type="submit"><UserPlus className="h-4 w-4" /> Add User</button>
         </form>
         <div className="space-y-4">
           {adminUsers.map((user) => (
@@ -2933,6 +3078,20 @@ function SettingsView({ state, adminUsers, setAdminUsers }: { state: ERPState; a
                   <p className="text-sm text-slate-500">{user.username} · {user.role}</p>
                 </div>
                 <ShieldCheck className="h-5 w-5 text-blue-600" />
+              </div>
+              <div className="mt-3 grid gap-2 text-xs font-bold text-slate-500 sm:grid-cols-2">
+                <span className="inline-flex items-center gap-1"><Globe className="h-3.5 w-3.5" /> IP: {user.ipAddress || "Not captured"}</span>
+                <span className="inline-flex items-center gap-1"><MapPin className="h-3.5 w-3.5" /> Geo: {user.geoLocation || "Not captured"}</span>
+                <span>WhatsApp: {user.whatsapp || "Not set"}</span>
+                <span>Last login: {user.lastLogin ? new Date(user.lastLogin).toLocaleString() : "Never"}</span>
+              </div>
+              <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                <input className={inputClass} value={user.password} onChange={(event) => updateUser(user.id, { password: event.target.value })} aria-label={`Password for ${user.name}`} />
+                <input className={inputClass} value={user.whatsapp || ""} onChange={(event) => updateUser(user.id, { whatsapp: event.target.value })} aria-label={`WhatsApp for ${user.name}`} />
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <button type="button" className="btn-secondary" onClick={() => resetUserPassword(user.id)}><RotateCcw className="h-4 w-4" /> Reset Password</button>
+                <button type="button" className="btn-secondary whatsapp-btn text-sm" onClick={() => sendCredentials(user)}><img src={whatsappIconUrl} alt="WhatsApp" /> Send Login</button>
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 {navAccess.map((area) => (
@@ -2967,16 +3126,17 @@ function InvoiceList({ invoices, markInvoicePaid, formatTZS, formatQty }: any) {
   };
 
   const documentHtml = (invoice: Invoice, type: "invoice" | "receipt") => createInvoiceReceiptHtml({ invoice, type, formatTZS, formatQty });
+  const documentPdf = (invoice: Invoice, type: "invoice" | "receipt") => createInvoiceReceiptPdf({ invoice, type, formatTZS, formatQty });
 
   const downloadDocument = (invoice: Invoice, type: "invoice" | "receipt") => {
-    downloadFile(`${type}-${invoice.invoiceNumber.replaceAll("/", "-")}.html`, documentHtml(invoice, type), "text/html;charset=utf-8");
+    downloadFile(`${type}-${invoice.invoiceNumber.replaceAll("/", "-")}.pdf`, documentPdf(invoice, type), "application/pdf");
   };
 
   const previewDocument = (invoice: Invoice, type: "invoice" | "receipt") => {
-    const win = window.open("", "_blank");
-    if (!win) return;
-    win.document.write(documentHtml(invoice, type));
-    win.document.close();
+    const blob = new Blob([documentPdf(invoice, type)], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    window.open(url, "_blank", "noopener,noreferrer");
+    window.setTimeout(() => URL.revokeObjectURL(url), 3000);
   };
 
   const emailInvoice = (invoice: Invoice) => {

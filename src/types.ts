@@ -146,6 +146,7 @@ export interface Customer {
   name: string;
   company: string;
   phone: string;
+  whatsapp?: string;
   email: string;
   tin: string;
   address: string;
