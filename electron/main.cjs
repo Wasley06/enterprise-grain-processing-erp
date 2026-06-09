@@ -1,4 +1,5 @@
 const { app, BrowserWindow, Menu, dialog } = require("electron");
+const { autoUpdater } = require("electron-updater");
 const { fork } = require("child_process");
 const path = require("path");
 const net = require("net");
@@ -6,6 +7,7 @@ const fs = require("fs");
 
 const APP_PORT = process.env.GRAIN_ERP_PORT || "3210";
 let serverProcess;
+let mainWindow;
 
 function log(message) {
   const userDataPath = app.getPath("userData");
@@ -64,13 +66,49 @@ function startServer() {
   serverProcess.on("exit", (code, signal) => log(`Server exited code=${code} signal=${signal}`));
 }
 
+function configureAutoUpdater() {
+  if (!app.isPackaged) {
+    log("Updater skipped in development mode.");
+    return;
+  }
+
+  autoUpdater.autoDownload = true;
+  autoUpdater.autoInstallOnAppQuit = true;
+
+  autoUpdater.on("checking-for-update", () => log("Checking for desktop update."));
+  autoUpdater.on("update-available", (info) => log(`Desktop update available: ${info.version}`));
+  autoUpdater.on("update-not-available", (info) => log(`Desktop update not available: ${info.version}`));
+  autoUpdater.on("download-progress", (progress) => log(`Desktop update download ${Math.round(progress.percent)}%.`));
+  autoUpdater.on("error", (error) => log(`Desktop update error: ${error.message}`));
+  autoUpdater.on("update-downloaded", async (info) => {
+    log(`Desktop update downloaded: ${info.version}`);
+    const result = await dialog.showMessageBox(mainWindow, {
+      type: "info",
+      buttons: ["Restart and update", "Update next time"],
+      defaultId: 0,
+      cancelId: 1,
+      title: "Grain ERP update ready",
+      message: `Grain ERP ${info.version} is ready.`,
+      detail: "Restart now to apply the update, or it will install automatically the next time you close and open Grain ERP."
+    });
+
+    if (result.response === 0) {
+      autoUpdater.quitAndInstall(false, true);
+    }
+  });
+
+  setTimeout(() => {
+    autoUpdater.checkForUpdates().catch((error) => log(`Desktop update check failed: ${error.message}`));
+  }, 3000);
+}
+
 async function createWindow() {
   Menu.setApplicationMenu(null);
   startServer();
   await waitForServer(APP_PORT);
 
   const iconPath = path.join(app.getAppPath(), "electron", "assets", "grain-erp-icon.ico");
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1440,
     height: 920,
     minWidth: 1100,
@@ -78,13 +116,8 @@ async function createWindow() {
     title: "Grain ERP",
     backgroundColor: "#061a2d",
     icon: iconPath,
+    frame: true,
     autoHideMenuBar: true,
-    titleBarStyle: "hidden",
-    titleBarOverlay: {
-      color: "#061a2d",
-      symbolColor: "#f8fafc",
-      height: 36
-    },
     roundedCorners: true,
     webPreferences: {
       contextIsolation: true,
@@ -92,10 +125,11 @@ async function createWindow() {
       sandbox: true
     }
   });
-  win.setMenu(null);
-  win.setMenuBarVisibility(false);
+  mainWindow.setMenu(null);
+  mainWindow.setMenuBarVisibility(false);
 
-  await win.loadURL(`http://127.0.0.1:${APP_PORT}`);
+  await mainWindow.loadURL(`http://127.0.0.1:${APP_PORT}`);
+  configureAutoUpdater();
 }
 
 app.whenReady().then(createWindow).catch((error) => {

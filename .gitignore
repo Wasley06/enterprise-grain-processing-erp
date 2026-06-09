@@ -21,3 +21,4 @@ release/win-unpacked/
 release/*.blockmap
 release/latest.yml
 release/Grain ERP Setup *.exe
+release/Grain.ERP.Setup.*.exe

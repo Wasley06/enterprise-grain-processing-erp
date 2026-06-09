@@ -1,7 +1,7 @@
 {
   "name": "grain-erp",
   "private": true,
-  "version": "1.0.4",
+  "version": "1.0.5",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -27,7 +27,14 @@
     "directories": {
       "output": "release"
     },
+    "artifactName": "Grain.ERP.Setup.${version}.${ext}",
     "icon": "electron/assets/grain-erp-icon.ico",
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://enterprise-grain-processing-erp.vercel.app/installers"
+      }
+    ],
     "win": {
       "icon": "electron/assets/grain-erp-icon.ico",
       "target": "nsis"
@@ -46,6 +53,7 @@
     "@tailwindcss/vite": "^4.1.14",
     "@vitejs/plugin-react": "^5.0.4",
     "dotenv": "^17.2.3",
+    "electron-updater": "^6.8.9",
     "express": "^4.21.2",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
