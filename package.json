@@ -1,7 +1,8 @@
 {
   "name": "grain-erp",
   "private": true,
-  "version": "1.0.5",
+  "version": "1.0.6",
+  "author": "Wasley Inc.",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -15,7 +16,7 @@
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit"
   },
-  "build": {
+    "build": {
     "appId": "com.grainerp.desktop",
     "productName": "Grain ERP",
     "asar": false,
@@ -37,6 +38,9 @@
     ],
     "win": {
       "icon": "electron/assets/grain-erp-icon.ico",
+      "signtoolOptions": {
+        "publisherName": "Wasley Inc."
+      },
       "target": "nsis"
     },
     "nsis": {

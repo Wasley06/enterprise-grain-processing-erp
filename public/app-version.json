@@ -1,6 +1,6 @@
 {
-  "version": "1.0.5",
-  "releasedAt": "2026-06-09T03:45:00+03:00",
+  "version": "1.0.6",
+  "releasedAt": "2026-06-09T04:05:00+03:00",
   "installerUrl": "https://enterprise-grain-processing-erp.vercel.app/installers/",
-  "notes": "Restores visible Windows minimize, maximize, and close controls while adding automatic desktop update support."
+  "notes": "Sets publisher to Wasley Inc. and makes desktop updates install automatically without manual installer downloads."
 }

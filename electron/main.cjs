@@ -80,21 +80,9 @@ function configureAutoUpdater() {
   autoUpdater.on("update-not-available", (info) => log(`Desktop update not available: ${info.version}`));
   autoUpdater.on("download-progress", (progress) => log(`Desktop update download ${Math.round(progress.percent)}%.`));
   autoUpdater.on("error", (error) => log(`Desktop update error: ${error.message}`));
-  autoUpdater.on("update-downloaded", async (info) => {
+  autoUpdater.on("update-downloaded", (info) => {
     log(`Desktop update downloaded: ${info.version}`);
-    const result = await dialog.showMessageBox(mainWindow, {
-      type: "info",
-      buttons: ["Restart and update", "Update next time"],
-      defaultId: 0,
-      cancelId: 1,
-      title: "Grain ERP update ready",
-      message: `Grain ERP ${info.version} is ready.`,
-      detail: "Restart now to apply the update, or it will install automatically the next time you close and open Grain ERP."
-    });
-
-    if (result.response === 0) {
-      autoUpdater.quitAndInstall(false, true);
-    }
+    log("Desktop update will install automatically on next app close.");
   });
 
   setTimeout(() => {
