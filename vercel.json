@@ -3,6 +3,11 @@
   "outputDirectory": "dist",
   "redirects": [
     {
+      "source": "/installers/GrainERP-Desktop-Setup-v1.0.3.exe",
+      "destination": "https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.3-desktop/Grain.ERP.Setup.1.0.3.exe",
+      "permanent": false
+    },
+    {
       "source": "/installers/GrainERP-Windows-Installer-v1.0.2.exe",
       "destination": "https://raw.githubusercontent.com/Wasley-Dev/Grain-ERP/main/installers/GrainERP-Windows-Installer.exe?v=1.0.2-fixed",
       "permanent": false
