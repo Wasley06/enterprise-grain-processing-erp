@@ -1,4 +1,4 @@
-const { app, BrowserWindow, dialog } = require("electron");
+const { app, BrowserWindow, Menu, dialog } = require("electron");
 const { fork } = require("child_process");
 const path = require("path");
 const net = require("net");
@@ -65,9 +65,11 @@ function startServer() {
 }
 
 async function createWindow() {
+  Menu.setApplicationMenu(null);
   startServer();
   await waitForServer(APP_PORT);
 
+  const iconPath = path.join(app.getAppPath(), "electron", "assets", "grain-erp-icon.ico");
   const win = new BrowserWindow({
     width: 1440,
     height: 920,
@@ -75,12 +77,23 @@ async function createWindow() {
     minHeight: 760,
     title: "Grain ERP",
     backgroundColor: "#061a2d",
+    icon: iconPath,
+    autoHideMenuBar: true,
+    titleBarStyle: "hidden",
+    titleBarOverlay: {
+      color: "#061a2d",
+      symbolColor: "#f8fafc",
+      height: 36
+    },
+    roundedCorners: true,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: true
     }
   });
+  win.setMenu(null);
+  win.setMenuBarVisibility(false);
 
   await win.loadURL(`http://127.0.0.1:${APP_PORT}`);
 }

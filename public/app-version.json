@@ -1,6 +1,6 @@
 {
-  "version": "1.0.3",
-  "releasedAt": "2026-06-09T02:30:00+03:00",
+  "version": "1.0.4",
+  "releasedAt": "2026-06-09T03:25:00+03:00",
   "installerUrl": "https://enterprise-grain-processing-erp.vercel.app/installers/",
-  "notes": "Adds a USB installer that can recover when run directly from WinRAR or ZIP preview."
+  "notes": "Adds a real branded Windows desktop setup installer with the Grain ERP icon and no Electron menu bar."
 }

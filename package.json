@@ -1,7 +1,7 @@
 {
   "name": "grain-erp",
   "private": true,
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "main": "electron/main.cjs",
   "scripts": {
@@ -27,7 +27,9 @@
     "directories": {
       "output": "release"
     },
+    "icon": "electron/assets/grain-erp-icon.ico",
     "win": {
+      "icon": "electron/assets/grain-erp-icon.ico",
       "target": "nsis"
     },
     "nsis": {

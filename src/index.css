@@ -315,6 +315,13 @@ button {
   box-shadow: 0 10px 28px rgba(15, 23, 42, 0.045);
 }
 
+.alert-row.focused {
+  border-color: #d6a83a;
+  background: #fffdf4;
+  box-shadow: 0 0 0 4px rgba(214, 168, 58, 0.2), 0 18px 42px rgba(15, 23, 42, 0.1);
+  outline: none;
+}
+
 .alert-row.read {
   opacity: 0.74;
 }
@@ -1157,6 +1164,12 @@ button {
 [data-theme="dark"] .alert-row {
   background: #111827 !important;
   border-color: #334155 !important;
+}
+
+[data-theme="dark"] .alert-row.focused {
+  background: #1f2937 !important;
+  border-color: #d6a83a !important;
+  box-shadow: 0 0 0 4px rgba(214, 168, 58, 0.24), 0 18px 42px rgba(0, 0, 0, 0.35) !important;
 }
 
 [data-theme="dark"] .erp-table th,

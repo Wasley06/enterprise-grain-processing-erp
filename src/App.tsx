@@ -345,6 +345,7 @@ export default function App() {
   const [profileImage, setProfileImage] = useState<string>(() => localStorage.getItem("erp.profileImage") || "");
   const [profileOpen, setProfileOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<NavItemId>("dashboard");
+  const [focusedAlertId, setFocusedAlertId] = useState<string | null>(null);
   const [dbState, setDbState] = useState<ERPState | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -912,6 +913,10 @@ export default function App() {
   const unreadAlerts = state.alerts.filter((alert) => !alert.isRead);
   const rawProducts = state.inventory.filter((item) => item.category === "Raw Material").map((item) => item.productName);
   const saleProducts = state.inventory.filter((item) => item.category !== "Raw Material").map((item) => item.productName);
+  const openAlerts = () => {
+    setFocusedAlertId(unreadAlerts[0]?.id || state.alerts[0]?.id || null);
+    setActiveTab("alerts");
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950" data-theme={themeMode}>
@@ -947,7 +952,7 @@ export default function App() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setActiveTab("alerts")}
+                    onClick={openAlerts}
                     className="alert-bell"
                     title={t("openAlerts")}
                     aria-label={t("openAlerts")}
@@ -1042,6 +1047,8 @@ export default function App() {
                 alerts={state.alerts}
                 clearAlert={clearAlert}
                 t={t}
+                focusedAlertId={focusedAlertId}
+                onFocusHandled={() => setFocusedAlertId(null)}
               />
             )}
 
@@ -2036,12 +2043,17 @@ function DashboardTableCard({ title, action, headers, rows, onAction }: { title:
 function AlertsView({
   alerts,
   clearAlert,
-  t
+  t,
+  focusedAlertId,
+  onFocusHandled
 }: {
   alerts: ERPAlert[];
   clearAlert: (id: string) => void;
   t: (key: string) => string;
+  focusedAlertId: string | null;
+  onFocusHandled: () => void;
 }) {
+  const alertRefs = React.useRef<Record<string, HTMLElement | null>>({});
   const unread = alerts.filter((alert) => !alert.isRead);
   const sortedAlerts = [...alerts].sort((a, b) => Number(a.isRead) - Number(b.isRead) || b.dateTime.localeCompare(a.dateTime));
   const severityTone: Record<ERPAlert["severity"], string> = {
@@ -2049,6 +2061,17 @@ function AlertsView({
     warning: "amber",
     danger: "rose"
   };
+
+  useEffect(() => {
+    if (!focusedAlertId) return;
+    const node = alertRefs.current[focusedAlertId];
+    if (!node) return;
+
+    node.scrollIntoView({ behavior: "smooth", block: "center" });
+    node.focus({ preventScroll: true });
+    const clearFocus = window.setTimeout(onFocusHandled, 2200);
+    return () => window.clearTimeout(clearFocus);
+  }, [focusedAlertId, onFocusHandled, alerts.length]);
 
   return (
     <div className="space-y-6">
@@ -2076,7 +2099,14 @@ function AlertsView({
             {sortedAlerts.map((alert) => {
               const tone = severityTone[alert.severity] || "blue";
               return (
-                <article key={alert.id} className={`alert-row ${alert.isRead ? "read" : ""}`}>
+                <article
+                  key={alert.id}
+                  ref={(node) => {
+                    alertRefs.current[alert.id] = node;
+                  }}
+                  tabIndex={-1}
+                  className={`alert-row ${alert.isRead ? "read" : ""} ${alert.id === focusedAlertId ? "focused" : ""}`}
+                >
                   <span className={`alert-icon tone-${tone}`}>
                     {alert.severity === "danger" ? <AlertTriangle className="h-5 w-5" /> : <Bell className="h-5 w-5" />}
                   </span>
