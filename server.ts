@@ -19,8 +19,11 @@ import {
   UserRole
 } from "./src/types";
 
+const runtimeDir = __dirname;
+const appRoot = fs.existsSync(path.join(runtimeDir, "index.html")) ? runtimeDir : process.cwd();
+
 // Setup storage path
-const STORE_PATH = path.join(process.cwd(), "erp-db-store.json");
+const STORE_PATH = path.join(appRoot, "erp-db-store.json");
 
 // System state container
 class ERPState {
@@ -1856,7 +1859,7 @@ async function serveApp() {
     app.use(vite.middlewares);
     console.log("Mounted Vite middleware dev runner");
   } else {
-    const distPath = path.join(process.cwd(), "dist");
+    const distPath = fs.existsSync(path.join(runtimeDir, "index.html")) ? runtimeDir : path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));

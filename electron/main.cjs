@@ -2,9 +2,17 @@ const { app, BrowserWindow, dialog } = require("electron");
 const { fork } = require("child_process");
 const path = require("path");
 const net = require("net");
+const fs = require("fs");
 
 const APP_PORT = process.env.GRAIN_ERP_PORT || "3210";
 let serverProcess;
+
+function log(message) {
+  const userDataPath = app.getPath("userData");
+  fs.mkdirSync(userDataPath, { recursive: true });
+  const logPath = path.join(userDataPath, "grain-erp-launch.log");
+  fs.appendFileSync(logPath, `${new Date().toISOString()} ${message}\n`);
+}
 
 function waitForServer(port, timeoutMs = 20000) {
   const started = Date.now();
@@ -29,8 +37,15 @@ function waitForServer(port, timeoutMs = 20000) {
 }
 
 function startServer() {
-  const serverPath = path.join(app.getAppPath(), "dist", "server.cjs");
+  const appPath = app.getAppPath();
+  const serverPath = path.join(appPath, "dist", "server.cjs");
+  const appCwd = appPath;
+  log(`Starting server ${serverPath} on port ${APP_PORT}`);
+  if (!fs.existsSync(serverPath)) {
+    throw new Error(`Packaged server file was not found: ${serverPath}`);
+  }
   serverProcess = fork(serverPath, [], {
+    cwd: appCwd,
     env: {
       ...process.env,
       NODE_ENV: "production",
@@ -40,8 +55,13 @@ function startServer() {
   });
 
   serverProcess.on("error", (error) => {
+    log(`Server error: ${error.message}`);
     dialog.showErrorBox("Grain ERP service failed", error.message);
   });
+
+  serverProcess.stdout?.on("data", (chunk) => log(`server stdout: ${chunk.toString().trim()}`));
+  serverProcess.stderr?.on("data", (chunk) => log(`server stderr: ${chunk.toString().trim()}`));
+  serverProcess.on("exit", (code, signal) => log(`Server exited code=${code} signal=${signal}`));
 }
 
 async function createWindow() {
