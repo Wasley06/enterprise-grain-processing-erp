@@ -44,9 +44,10 @@
       }
 
       img {
-        width: 78px;
-        height: 78px;
+        width: 88px;
+        height: 88px;
         object-fit: contain;
+        filter: drop-shadow(0 10px 18px rgba(0,0,0,0.08));
       }
 
       h1 {
@@ -63,20 +64,26 @@
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 18px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 20px;
       }
 
       .card {
         display: flex;
-        min-height: 190px;
+        min-height: 210px;
         flex-direction: column;
         justify-content: space-between;
         border: 1px solid var(--border);
-        border-radius: 18px;
-        background: rgba(255, 255, 255, 0.9);
-        padding: 22px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.92);
+        padding: 24px;
         box-shadow: 0 18px 50px rgba(15, 23, 42, 0.08);
+        transition: transform .15s ease, box-shadow .15s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 22px 60px rgba(15, 23, 42, 0.12);
       }
 
       h2 {
@@ -88,12 +95,13 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        min-height: 44px;
+        min-height: 46px;
         border-radius: 12px;
         background: var(--gold);
         color: var(--blue);
         font-weight: 900;
         text-decoration: none;
+        padding: 0 14px;
       }
 
       .secondary {
@@ -110,6 +118,7 @@
           <h1>Fabegon ERP Installers</h1>
           <p>Download the branded Windows setup installer, Android APK, and backup packages.</p>
       <p style="margin-top:6px"><a href="https://github.com/Wasley-Dev" target="_blank" rel="noopener noreferrer" style="color:var(--muted);font-weight:700">Developed by Wasley-Dev</a></p>
+      <p style="margin-top:6px;color:var(--muted);font-weight:700">Current version: <strong style="color:var(--text)">v1.0.10</strong></p>
         </div>
       </header>
 
@@ -119,7 +128,7 @@
             <h2>Windows Setup Installer</h2>
             <p>Recommended v1.0.10 installer by Fabegon. Installs Fabegon ERP Setup once; future updates apply automatically.</p>
           </div>
-          <a href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/Grain.ERP.Setup.1.0.10.exe" download="Fabegon ERP Setup v1.0.10.exe">Download Fabegon ERP Setup EXE</a>
+          <a href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/Fabegon.ERP.Setup.v1.0.10.exe" download="Fabegon ERP Setup v1.0.10.exe">Download Fabegon ERP Setup EXE</a>
         </article>
 
         <article class="card">
@@ -127,7 +136,7 @@
             <h2>Windows USB Package</h2>
             <p>Backup package for USB drive installation if the setup installer is blocked.</p>
           </div>
-          <a href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/GrainERP-USB-Installer.zip" download="Fabegon ERP USB Installer.zip">Download Fabegon ERP USB ZIP</a>
+          <a href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/Fabegon.ERP.USB.Installer.v1.0.10.zip" download="Fabegon ERP USB Installer.zip">Download Fabegon ERP USB ZIP</a>
         </article>
 
         <article class="card">
@@ -135,7 +144,7 @@
             <h2>Android Mobile</h2>
             <p>APK installer for Android phones with the latest offline and language fixes.</p>
           </div>
-          <a href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/GrainERP-Android-debug-v1.0.10.apk" download="Fabegon ERP Android Setup.apk">Download Fabegon ERP APK</a>
+          <a href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/Fabegon.ERP.Android.Setup.v1.0.10.apk" download="Fabegon ERP Android Setup.apk">Download Fabegon ERP APK</a>
         </article>
 
         <article class="card">
@@ -143,7 +152,7 @@
             <h2>Windows Portable</h2>
             <p>Backup ZIP package for manual installation.</p>
           </div>
-          <a class="secondary" href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/GrainERP-Windows-Portable.zip" download="Fabegon ERP Windows Portable.zip">Download Fabegon ERP Portable ZIP</a>
+          <a class="secondary" href="https://github.com/Wasley06/enterprise-grain-processing-erp/releases/download/v1.0.10-desktop/Fabegon.ERP.Portable.v1.0.10.zip" download="Fabegon ERP Windows Portable.zip">Download Fabegon ERP Portable ZIP</a>
         </article>
       </section>
     </main>
